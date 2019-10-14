@@ -33,7 +33,7 @@
 * Download the finished project
 
 ### Day 6 - 7 (bonus)
-* Save the current board to ther local storage
+* Save the current board to the local storage
 * Use websockets to send the finished drawing over to other users 
 
 
