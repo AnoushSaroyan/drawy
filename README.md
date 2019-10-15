@@ -6,6 +6,8 @@
 ## Functionality and MVP
 - [ ] Canvas Board for drawing
 - [ ] Clear Button to clear off the board
+- [ ] Eraser
+- [ ] Undo Button
 - [ ] Download Button to download the finished drawing
 - [ ] Brush Selection 
 - [ ] Color Picker
