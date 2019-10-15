@@ -86,15 +86,113 @@
 /************************************************************************/
 /******/ ({
 
+/***/ "./dist/styles/sketch-pad.scss":
+/*!*************************************!*\
+  !*** ./dist/styles/sketch-pad.scss ***!
+  \*************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+
+
+/***/ }),
+
+/***/ "./src/components/sketchPad.js":
+/*!*************************************!*\
+  !*** ./src/components/sketchPad.js ***!
+  \*************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return SketchPad; });
+/* harmony import */ var _dist_styles_sketch_pad_scss__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../dist/styles/sketch-pad.scss */ "./dist/styles/sketch-pad.scss");
+/* harmony import */ var _dist_styles_sketch_pad_scss__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_dist_styles_sketch_pad_scss__WEBPACK_IMPORTED_MODULE_0__);
+
+
+class SketchPad {
+    constructor(canvas, tools) {
+        this.canvas = canvas;
+        this.context = canvas.getContext("2d");
+        // this.dimensions = { width: canvas.width, height: canvas.height };
+        this.setBackground();
+        this.dragging = false; // indicates if the mouse is held down
+        this.putPoint = this.putPoint.bind(this);
+        this.engage = this.engage.bind(this);
+        this.disengage = this.disengage.bind(this);
+        this.canvas.addEventListener("mousedown", this.engage);
+        const html = document.getElementsByTagName("html")[0];
+        html.addEventListener("mouseup", this.disengage)
+        // this.canvas.addEventListener("mouseup", this.disengage);
+        this.canvas.addEventListener("mousemove", this.putPoint);
+
+
+    }
+
+    putPoint(e) {
+        const radius = 10;
+        if(this.dragging) {
+            this.context.lineWidth = 2*radius;
+            this.context.strokeStyle = "#FF0000";
+            this.context.lineCap = "round";
+
+            this.context.lineTo(e.offsetX, e.offsetY);
+            this.context.stroke(); // nothing will show untill we do stroke() or fill()
+            this.context.beginPath();
+            // this.context.arc(e.offsetX, e.offsetY, radius, 0, Math.PI*2);
+            // this.context.fill();
+            // this.context.beginPath();
+            this.context.moveTo(e.offsetX, e.offsetY); // sets an active point
+        }
+    }
+
+    engage(e) {
+        this.dragging = true;
+        this.putPoint(e);
+    }
+
+    disengage() {
+        this.dragging = false;
+        this.context.beginPath(); // clears any current path
+    }
+
+    setBackground() {
+        const background = new Image();
+        background.src = "/dist/images/sketchpad.jpg";
+
+        background.onload = () => {
+            this.context.drawImage(
+                background,
+                0,
+                0,
+                this.canvas.width,
+                this.canvas.height
+            );
+        };
+    }
+}
+
+/***/ }),
+
 /***/ "./src/index.js":
 /*!**********************!*\
   !*** ./src/index.js ***!
   \**********************/
-/*! no static exports found */
-/***/ (function(module, exports) {
+/*! no exports provided */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _components_sketchPad__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./components/sketchPad */ "./src/components/sketchPad.js");
+
 
 document.addEventListener("DOMContentLoaded", () => {
-
+    const canvas = document.getElementById("canvas");
+    canvas.setAttribute('width', 800);
+    canvas.setAttribute('height', 800);
+    // tools goes here, and then will pass it as a second arg to the cnavas
+    new _components_sketchPad__WEBPACK_IMPORTED_MODULE_0__["default"](canvas);
 });
 
 /***/ })
