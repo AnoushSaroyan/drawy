@@ -1,3 +1,8 @@
+@font-face {
+   font-family: RobotoMonoRegular;
+   src: asset-url('../fonts/RobotoMono-Regular.ttf');
+}
+
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
 a, abbr, acronym, address, big, cite, code,
@@ -13,8 +18,11 @@ menu, nav, output, ruby, section, summary,
 time, mark, audio, video {
   margin: 0;
 	padding: 0;
-	border: 0;
-	font-size: 100%;
+    border: 0;
+    /* background-color: #ededee; */
+    font-size: 57%;
+    color: #666;
+    font-family: RobotoMonoRegular, monospace;
 	font: inherit;
 	vertical-align: baseline;
 }
@@ -36,6 +44,10 @@ video {
     *display: inline;
     *zoom: 1;
     max-width: 100%;
+}
+
+canvas:hover {
+  cursor: crosshair;
 }
 
 [hidden] {

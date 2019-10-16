@@ -11,8 +11,8 @@
 - [ ] Download Button to download the finished drawing
 - [ ] Brush Selection 
 - [ ] Color Picker
-- [ ] Funny Fonts like animal's feet shapes 
-- [ ] Bonus: Allow uploads to use an image as a background of the board
+- [ ] Funny Fonts like animal footprint
+- [ ] Allow uploads to use a font
 - [ ] Bonus: Save the current board to the local storage
 - [ ] Bonus: Websockets to send the final image over to other users
 
@@ -20,7 +20,7 @@
 ## Technologies and Technical Challenges
 	javascript
 	CSS
-    websockets
+    AI/Neural Networks
 
 ### Day 1 - 3
 * Proposal
@@ -31,12 +31,11 @@
 
 
 ### Day 4 - 5
-* Allow uploads to set a background image for the board
+* File uploads 
 * Download the finished project
 
 ### Day 6 - 7 (bonus)
-* Save the current board to the local storage
-* Use websockets to send the finished drawing over to other users 
+* Implement autodraw feature using AI/Neural Networks
 
 
 
