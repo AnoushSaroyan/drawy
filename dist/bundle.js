@@ -86,17 +86,6 @@
 /************************************************************************/
 /******/ ({
 
-/***/ "./src/components/brushPicker.js":
-/*!***************************************!*\
-  !*** ./src/components/brushPicker.js ***!
-  \***************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-
-
-/***/ }),
-
 /***/ "./src/components/colorPicker.js":
 /*!***************************************!*\
   !*** ./src/components/colorPicker.js ***!
@@ -301,64 +290,115 @@ class SketchPad {
         this.tool = tool;
         this.context = canvas.getContext("2d");
 
+        // set the background to white
+        this.context.fillStyle = "white";
+        this.context.fillRect(0, 0, canvas.width, canvas.height);
+
         // clear canvas
         this.clearCanvasBtn = document.getElementById('clear-canvas-btn');
 
         // color fill
         this.colorFillBtn = document.getElementById("color-fill");
         
-        // set the background to white
-        this.context.fillStyle = "white";
-        this.context.fillRect(0, 0, canvas.width, canvas.height);
-        // this.dimensions = { width: canvas.width, height: canvas.height };
-        // this.setBackground();
+        // undo button
+        this.undoBtn = document.getElementById("undo-btn");
+
+        // redo button
+        this.redoBtn = document.getElementById("redo-btn");
+
+        // list for undo and redo 
+        this.undoList = [];
+        this.redoList = [];
+
         this.dragging = false; // indicates if the mouse is held down
+
         this.putPoint = this.putPoint.bind(this);
         this.engage = this.engage.bind(this);
         this.disengage = this.disengage.bind(this);
         this.clear = this.clear.bind(this);
         this.colorFill = this.colorFill.bind(this);
+        this.undo = this.undo.bind(this);
+        this.redo = this.redo.bind(this);
+        this.saveState = this.saveState.bind(this);
+        this.restoreState = this.restoreState.bind(this);
 
+        // draw events
         this.canvas.addEventListener("mousedown", this.engage);
         const html = document.getElementsByTagName("html")[0];
         html.addEventListener("mouseup", this.disengage)
         // this.canvas.addEventListener("mouseup", this.disengage);
         this.canvas.addEventListener("mousemove", this.putPoint);
 
+        // action events
         this.clearCanvasBtn.addEventListener('click', this.clear);
         this.colorFillBtn.addEventListener("click", this.colorFill);
+        this.undoBtn.addEventListener("click", this.undo);
+        this.redoBtn.addEventListener("click", this.redo);
+    }
+
+    saveState(list, keepRedo) {
+        keepRedo = keepRedo || false;
+        if (!keepRedo) {
+            this.redoList = [];
+        }
+
+        (list || this.undoList).push(this.canvas.toDataURL());
+    }
+
+    restoreState(popList, pushList) {
+        if (popList.length) {
+            this.saveState(pushList, true);
+            let ele = popList.pop();
+            // let img = new Element('img', { 'src': ele });
+            let img = document.createElement('img');
+            img.src = ele;
+
+            img.onload = () => {
+                this.clear()
+                this.context.drawImage(img, 0, 0, this.canvas.width, this.canvas.height, 0, 0, this.canvas.width, this.canvas.height);
+            }
+        }
+    }
+
+    undo() { 
+        this.restoreState(this.undoList, this.redoList);
+    }
+
+    redo() { 
+        this.restoreState(this.redoList, this.undoList);
     }
 
     putPoint(e) {
-        const radius = 10;
+        const brushWidth = document.getElementById("brush-size");
+        // current collor goes here
+
         if(this.dragging) {
-            this.context.lineWidth = 2*radius;
-            this.context.strokeStyle = "#FF0000";
+            this.context.lineWidth = brushWidth.value;
+            this.context.strokeStyle = "#58d33a";
             // this.context.strokeStyle = this.tool.colorPicker.selectColor;
             this.context.lineCap = "round";
 
             this.context.lineTo(e.offsetX, e.offsetY);
             this.context.stroke(); // nothing will show untill we do stroke() or fill()
-            this.context.beginPath();
-            // this.context.arc(e.offsetX, e.offsetY, radius, 0, Math.PI*2);
-            // this.context.fill();
-            // this.context.beginPath();
+            this.context.beginPath(); 
             this.context.moveTo(e.offsetX, e.offsetY); // sets an active point
         }
     }
 
     engage(e) {
+        this.saveState();
         this.dragging = true;
-        this.putPoint(e);
+        this.putPoint(e);  
     }
 
-    disengage() {
+    disengage(e) {
         this.dragging = false;
         this.context.beginPath(); // clears any current path
+        
     }
 
     colorFill() {
-        this.context.fillStyle = "yellow";
+        this.context.fillStyle = this.context.strokeStyle;
         this.context.fillRect(0, 0, canvas.width, canvas.height);
     }
 
@@ -372,6 +412,74 @@ class SketchPad {
         this.context.fillStyle = "white";
         this.context.fillRect(0, 0, canvas.width, canvas.height);
     }
+
+
+    // this.points.push({
+        //     // x: this.mouseX,
+        //     // y: this.mouseY,
+        //     x: e.offsetX,
+        //     y: e.offsetY,
+        //     size: this.context.lineWidth,
+        //     color: this.context.strokeStyle,
+        //     mode: "end"
+        // });
+
+     // this.points.push({
+        //     // x: this.mouseX,
+        //     // y: this.mouseY,
+        //     x: e.offsetX,
+        //     y: e.offsetY,
+        //     size: this.context.lineWidth,
+        //     color: this.context.strokeStyle,
+        //     mode: "begin"
+        // });
+
+        // this.lastX = this.mouseX;
+        // this.lastY = this.mouseY;
+
+    // this.interval;
+        // this.undoBtn.addEventListener("mousedown", () => {
+        //     this.interval = setInterval(this.undoLast, 40);
+        // });
+        // this.undoBtn.addEventListener("mouseup", () => {
+        //     clearInterval(this.interval);
+        // });
+    // redrawAll() {
+    //     if (this.points.length === 0) {
+    //         return;
+    //     }
+
+    //     // this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    //     this.clear();
+
+    //     for (let i = 0; i < this.points.length; i++) {
+    //         let point = this.points[i];
+    //         let begin = false;
+    //         if (this.context.lineWidth != point.size) {
+    //             this.context.lineWidth = point.size;
+    //             begin = true;
+    //         }
+    //         if (this.context.strokeStyle != point.color) {
+    //             this.context.strokeStyle = point.color;
+    //             begin = true;
+    //         }
+    //         if (point.mode == "begin" || begin) {
+    //             this.context.beginPath();
+    //             this.context.moveTo(point.x, point.y);
+    //         }
+    //         this.context.lineTo(point.x, point.y);
+    //         if (point.mode == "end" || (i == this.points.length - 1)) {
+    //             this.context.stroke();
+    //         }
+    //     }
+    //     this.context.stroke();
+    // }
+
+    // undoLast() {
+    //     this.points.pop();
+    //     // debugger
+    //     this.redrawAll();
+    // }
 
     // setBackground() {
     //     const background = new Image();
@@ -401,16 +509,12 @@ class SketchPad {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Tool; });
-/* harmony import */ var _brushPicker__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./brushPicker */ "./src/components/brushPicker.js");
-/* harmony import */ var _brushPicker__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_brushPicker__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _colorPicker__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./colorPicker */ "./src/components/colorPicker.js");
-
+/* harmony import */ var _colorPicker__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./colorPicker */ "./src/components/colorPicker.js");
 
 
 class Tool {
     constructor(colorPicker, BrushPicker) {
         this.colorPicker = colorPicker;
-        this.BrushPicker = BrushPicker;
     }
 }
 
