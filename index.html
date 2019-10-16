@@ -4,13 +4,52 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" href="./dist/styles/reset.scss">
-    <title>This is a funny drawing app</title>
+    <link rel="stylesheet" href="./dist/styles/reset.css">
+    <link rel="stylesheet" href="./dist/styles/main.css">
+    <link rel="stylesheet" href="./dist/styles/color-picker.css">
+    <title>Drawy</title>
 </head>
 <body>
-    <div>
-        <p>Drawwwwwy</p>
-        <canvas id="canvas" display="block"></canvas>
+    <div id="app-main">
+        <div id="main-nav">
+            <h1>Drawy</h1>
+        </div>
+
+        <div class="app-body">
+            <div id="toolbar">
+                <div class="tool-pencil tool-icon">
+                    <img src="./dist/images/pencil.png" alt="">
+                    <div class="brush-slider">
+                        <img src="./dist/images/brush-width.png" alt="" id="brush-slider-img">
+                        <input type="range" id="brush-size" min="1" max="68" step="1" value="23" id="brush-slider-input">
+                    </div>
+                </div>  
+                <div class="tool-shape tool-icon">
+                    <img src="./dist/images/shape.png" alt="">
+                </div>
+                <div id="color-fill" class="tool-fill tool-icon">
+                    <img src="./dist/images/color-filler.png" alt="">
+                </div>
+                <div class="tool-image-upload tool-icon">
+                    <img src="./dist/images/color-filler.png" alt="">
+                </div>  
+                <div class="tool-color">
+                    <div style="background-color: #58d33a" class="current-color"></div>
+                </div>
+                <div class="tool-undo tool-icon tool-action">
+                    <img src="./dist/images/undo.png" alt="">
+                </div>
+                <div class="tool-zoom tool-icon tool-action">
+                    <img src="./dist/images/zoom.png" alt="">
+                </div>
+                <div id="clear-canvas-btn" class="tool-clear tool-icon tool-action">
+                    <img src="./dist/images/delete.png" alt="">
+                </div>
+            </div>
+            <div id="canvas-container">
+                <canvas id="canvas"></canvas>
+            </div>
+        </div>
     </div>
 
     <script src="./dist/bundle.js"></script>
