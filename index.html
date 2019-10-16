@@ -21,7 +21,7 @@
                     <img src="./dist/images/pencil.png" alt="">
                     <div class="brush-slider">
                         <img src="./dist/images/brush-width.png" alt="" id="brush-slider-img">
-                        <input type="range" id="brush-size" min="1" max="68" step="1" value="23" id="brush-slider-input">
+                        <input type="range" id="brush-size" min="1" max="68" step="1" value="23">
                     </div>
                 </div>  
                 <div class="tool-shape tool-icon">
@@ -31,13 +31,22 @@
                     <img src="./dist/images/color-filler.png" alt="">
                 </div>
                 <div class="tool-image-upload tool-icon">
-                    <img src="./dist/images/color-filler.png" alt="">
+                    <button>upload</button>
                 </div>  
+                <div class="tool-footprint tool-icon">
+                    <button>footprint</button>
+                </div>
                 <div class="tool-color">
                     <div style="background-color: #58d33a" class="current-color"></div>
                 </div>
                 <div class="tool-undo tool-icon tool-action">
-                    <img src="./dist/images/undo.png" alt="">
+                    <img src="./dist/images/undo.png" alt="" id="undo-btn">
+                </div>
+                <div class="tool-redo tool-icon tool-action">
+                    <button id="redo-btn">redo</button>
+                </div>
+                <div class="tool-eraser tool-icon tool-action">
+                    <button>eraser</button>
                 </div>
                 <div class="tool-zoom tool-icon tool-action">
                     <img src="./dist/images/zoom.png" alt="">
