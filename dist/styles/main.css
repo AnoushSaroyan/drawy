@@ -72,16 +72,39 @@ html {
     background-color: #000;
 } */
 
-#brush-slider-img {
+/* #brush-slider-img {
     width: 123px;
     height: 1.5rem;
     border: none;
     box-shadow: none;
     border-radius: 0;
     background-color: #ededee;
-}
+} */
 
 .tool-pencil {
     display: flex;
     flex-direction: row;
+}
+
+/* .tool-color {
+    display: flex;
+    flex-direction: row;
+} */
+
+.color-picker {
+    height: 42px;
+    width: 250px;
+    border: 2px solid #ffff;
+    border-radius: 20px;
+}
+
+#brush-size {
+    -webkit-appearance: none;
+    background: url("../images/brush-width.png") center no-repeat;
+    background-size: 123px 24px;
+    outline: none;
+}
+
+#color-strip {
+    border-radius: 20px;
 }
