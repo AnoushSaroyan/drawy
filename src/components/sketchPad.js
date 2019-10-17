@@ -69,7 +69,8 @@ export default class SketchPad {
             img.src = ele;
 
             img.onload = () => {
-                this.clear()
+                // this.clear();
+                this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
                 this.context.drawImage(img, 0, 0, this.canvas.width, this.canvas.height, 0, 0, this.canvas.width, this.canvas.height);
             }
         }
@@ -89,8 +90,8 @@ export default class SketchPad {
 
         if(this.dragging) {
             this.context.lineWidth = brushWidth.value;
-            this.context.strokeStyle = "#58d33a";
-            // this.context.strokeStyle = this.tool.colorPicker.selectColor;
+            // this.context.strokeStyle = "#58d33a";
+            this.context.strokeStyle = this.tool.colorPicker.selectedColor;
             this.context.lineCap = "round";
 
             this.context.lineTo(e.offsetX, e.offsetY);
@@ -113,7 +114,7 @@ export default class SketchPad {
     }
 
     colorFill() {
-        this.context.fillStyle = this.context.strokeStyle;
+        this.context.fillStyle = this.tool.colorPicker.selectedColor;
         this.context.fillRect(0, 0, canvas.width, canvas.height);
     }
 
@@ -127,87 +128,4 @@ export default class SketchPad {
         this.context.fillStyle = "white";
         this.context.fillRect(0, 0, canvas.width, canvas.height);
     }
-
-
-    // this.points.push({
-        //     // x: this.mouseX,
-        //     // y: this.mouseY,
-        //     x: e.offsetX,
-        //     y: e.offsetY,
-        //     size: this.context.lineWidth,
-        //     color: this.context.strokeStyle,
-        //     mode: "end"
-        // });
-
-     // this.points.push({
-        //     // x: this.mouseX,
-        //     // y: this.mouseY,
-        //     x: e.offsetX,
-        //     y: e.offsetY,
-        //     size: this.context.lineWidth,
-        //     color: this.context.strokeStyle,
-        //     mode: "begin"
-        // });
-
-        // this.lastX = this.mouseX;
-        // this.lastY = this.mouseY;
-
-    // this.interval;
-        // this.undoBtn.addEventListener("mousedown", () => {
-        //     this.interval = setInterval(this.undoLast, 40);
-        // });
-        // this.undoBtn.addEventListener("mouseup", () => {
-        //     clearInterval(this.interval);
-        // });
-    // redrawAll() {
-    //     if (this.points.length === 0) {
-    //         return;
-    //     }
-
-    //     // this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
-    //     this.clear();
-
-    //     for (let i = 0; i < this.points.length; i++) {
-    //         let point = this.points[i];
-    //         let begin = false;
-    //         if (this.context.lineWidth != point.size) {
-    //             this.context.lineWidth = point.size;
-    //             begin = true;
-    //         }
-    //         if (this.context.strokeStyle != point.color) {
-    //             this.context.strokeStyle = point.color;
-    //             begin = true;
-    //         }
-    //         if (point.mode == "begin" || begin) {
-    //             this.context.beginPath();
-    //             this.context.moveTo(point.x, point.y);
-    //         }
-    //         this.context.lineTo(point.x, point.y);
-    //         if (point.mode == "end" || (i == this.points.length - 1)) {
-    //             this.context.stroke();
-    //         }
-    //     }
-    //     this.context.stroke();
-    // }
-
-    // undoLast() {
-    //     this.points.pop();
-    //     // debugger
-    //     this.redrawAll();
-    // }
-
-    // setBackground() {
-    //     const background = new Image();
-    //     background.src = "/dist/images/sketchpad.jpg";
-
-    //     background.onload = () => {
-    //         this.context.drawImage(
-    //             background,
-    //             0,
-    //             0,
-    //             this.canvas.width,
-    //             this.canvas.height
-    //         );
-    //     };
-    // }
 }
