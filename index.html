@@ -18,43 +18,47 @@
 
         <div class="app-body">
             <div id="toolbar">
-                <div class="tool-pencil tool-icon">
-                    <img src="./dist/images/pencil.png" alt="" class="tool-hover">
-                    <div class="brush-slider">
+                <div class="tool-pencil tool-icon" id="tool-pencil-div">
+                    <img src="./dist/images/pencil.png" alt="" class="tool-hover" id="brush-icon">
+                    <div class="brush-slider" id="brush-slider-div">
                         <img src="./dist/images/brush-width.png" alt="" id="brush-slider-img">
-                        <input type="range" id="brush-size" min="1" max="68" step="1" value="5">
+                        <input type="range" id="brush-size" min="1" max="68" step="1" value="3">
                     </div>
                 </div>  
-                <div class="tool-resize tool-icon">
-                    <img src="./dist/images/pointer.png" alt="" class="tool-hover">
-                </div>
-                <div id="color-fill" class="tool-fill tool-icon">
-                    <img src="./dist/images/color-filler.png" alt="" class="tool-hover">
+                <div class="tool-eraser tool-icon">
+                    <!-- <button>eraser</button> -->
+                    <img src="./dist/images/eraser.png" alt="" class="tool-hover" id="eraser-icon">
                 </div>
                 <div class="tool-image-upload tool-icon">
                     <!-- <button>upload</button> -->
                     <label class="image-upload-label">
-                        <img src="./dist/images/tree.png" alt="upload an image" class="tool-hover">
+                        <img src="./dist/images/tree.png" alt="upload an image" class="tool-hover" id="upload-icon">
                         <input type="file" id="image-upload" accept="image/jpeg, image/png, image/jpg, image/webp">
                     </label>
                     <div id="images">
-                        <img src="./dist/images/pawprint-yellow.png" alt="" class="upload">
-                        <img src="./dist/images/pawprint.png" alt="" class="upload">
-                        <img src="./dist/images/heart.png" alt="" class="upload">
                         <img src="./dist/images/paw.png" alt="" class="upload">
                         <img src="./dist/images/bird-footprint-on-circle.png" alt="" class="upload">
                         <img src="./dist/images/animal-footprints.png" alt="" class="upload">
+                        <img src="./dist/images/heart.png" alt="" class="upload">
+                        <img src="./dist/images/pawprint.png" alt="" class="upload">
+                        <img src="./dist/images/pawprint-yellow.png" alt="" class="upload">
                     </div>
                 </div>  
                 <!-- <div class="tool-footprint tool-icon">
                     <button>footprint</button>
                 </div> -->
+                <div class="tool-resize tool-icon">
+                    <img src="./dist/images/pointer.png" alt="" class="tool-hover">
+                </div>
                 <div class="tool-color">
                     <div style="background-color: #58d33a" class="current-color" id="color-label"></div>
                     <!-- <input type="checkbox" id="color-input" checked></input> -->
                     <div class="color-picker">
-                        <canvas id="color-strip" height="40" width="250"></canvas>
+                        <canvas id="color-strip" height="40" width="258"></canvas>
                     </div>
+                </div>
+                <div id="color-fill" class="tool-fill tool-icon">
+                    <img src="./dist/images/color-filler.png" alt="" class="tool-hover">
                 </div>
                 <div class="tool-undo tool-icon tool-action">
                     <img src="./dist/images/undo.png" alt="" id="undo-btn" class="tool-hover">
@@ -63,15 +67,14 @@
                     <!-- <button id="redo-btn">redo</button> -->
                     <img src="./dist/images/redo.png" alt="" id="redo-btn" class="tool-hover">
                 </div>
-                <div class="tool-eraser tool-icon tool-action">
-                    <!-- <button>eraser</button> -->
-                    <img src="./dist/images/eraser.png" alt="" class="tool-hover">
-                </div>
                 <!-- <div class="tool-zoom tool-icon tool-action">
                     <img src="./dist/images/zoom.png" alt="">
                 </div> -->
                 <div id="clear-canvas-btn" class="tool-clear tool-icon tool-action">
                     <img src="./dist/images/delete.png" alt="" class="tool-hover">
+                </div>
+                <div class="tool-download tool-icon tool-action">
+                    <img src="./dist/images/download.png" alt="" id="download-btn" class="tool-hover" >
                 </div>
             </div>
             <div id="canvas-container">

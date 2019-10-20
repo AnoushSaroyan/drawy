@@ -5,8 +5,8 @@ import Tool from "./components/tool";
 
 document.addEventListener("DOMContentLoaded", () => {
     const canvas = document.getElementById("canvas");
-    canvas.setAttribute('width', 400);
-    canvas.setAttribute('height', 400);
+    canvas.setAttribute('width', 700);
+    canvas.setAttribute('height', 600);
     // tools goes here, and then will pass it as a second arg to the cnavas
     const colorPicker = new ColorPicker();
     const imageUpload = new ImageUpload();
