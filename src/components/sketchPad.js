@@ -44,9 +44,7 @@ export default class SketchPad {
 
         this.dragging = false; // indicates if the mouse is held down
         this.loadStencils();
-        this.prepareNewShape();
-
-        this.suggestionsCompleted = true; // when you pick an img it will keep getting new suggestions 
+        this.prepareNewShape(); 
 
         // binds
         this.putPoint = this.putPoint.bind(this);
@@ -155,21 +153,37 @@ export default class SketchPad {
     }
 
     pickSuggestion(e) {
-        // debugger
-        // this.clear();
-        let image = new Image();
-        image.crossOrigin = "Anonymous";
-        image.src = e.target.src;
-        image.setAttribute('style', "width: 50px; height:50px;");
-        // image.setAttribute('height', 50);
+        try { 
+            // debugger
+            // this.clear();
+            let xMax = this.canvas.width;
+            let yMax = this.canvas.height;
 
-        image.backgroundColor = 'transparent';
-        image.onload = () => this.context.drawImage(
-            image, 
-            e.offsetX - 25,
-            e.offsetY - 25,
-            50 * (1 / 2 * this.context.lineWidth),
-            50 * (1 / 2 * this.context.lineWidth));
+            let xAv = (Math.max.apply(null, this.shapes[0]) + Math.min.apply(null, this.shapes[0])) / 2;
+            let yAv = (Math.max.apply(null, this.shapes[1]) + Math.min.apply(null, this.shapes[1])) / 2;
+
+            let w = 200;
+            let h = 200;
+
+            let image = new Image();
+            image.crossOrigin = "Anonymous";
+            image.src = e.target.src;
+            image.setAttribute('style', "width: 50px; height:50px;");
+            // image.setAttribute('height', 50);
+
+            // this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+            image.backgroundColor = 'transparent';
+            image.onload = () => this.context.drawImage(
+                image, 
+                e.offsetX - 25,
+                e.offsetY - 25,
+                50 * (1 / 2 * this.context.lineWidth),
+                50 * (1 / 2 * this.context.lineWidth));
+
+
+        } catch {
+            console.log("sugesstions are not completed.")
+        }        
     }
     ///////
 
@@ -217,10 +231,20 @@ export default class SketchPad {
             this.context.strokeStyle = this.tool.colorPicker.selectedColor;
             this.context.lineCap = "round";
 
-            this.context.lineTo(e.offsetX, e.offsetY);
-            this.context.stroke(); // nothing will show untill we do stroke() or fill()
-            this.context.beginPath(); 
-            this.context.moveTo(e.offsetX, e.offsetY); // sets an active point
+            if (this.tool.imageUpload.currentImg) {
+                this.context.drawImage(
+                    this.tool.imageUpload.currentImg,
+                    e.offsetX - 25,
+                    e.offsetY - 25,
+                    50 * (1 / 2 * brushWidth.value),
+                    50 * (1 / 2 * brushWidth.value)
+                );
+            } else {
+                this.context.lineTo(e.offsetX, e.offsetY);
+                this.context.stroke(); // nothing will show untill we do stroke() or fill()
+                this.context.beginPath(); 
+                this.context.moveTo(e.offsetX, e.offsetY); // sets an active point
+            }
 
             // save the coords to the current shape
             this.storeCoordinates(e.offsetX, e.offsetY, Date.now() - this.pressedAt);
@@ -245,6 +269,7 @@ export default class SketchPad {
     colorFill() {
         this.context.fillStyle = this.tool.colorPicker.selectedColor;
         this.context.fillRect(0, 0, canvas.width, canvas.height);
+        // this.saveState();
     }
 
     clear(e) {
@@ -259,6 +284,8 @@ export default class SketchPad {
 
         this.shapes = [];
         this.drawSuggestions.innerHTML = '';
-        this.suggestionsCompleted = true;
+
+        document.getElementById("draw-suggestions").innerHTML = "";
+        // this.suggestionsCompleted = true;
     }
 }

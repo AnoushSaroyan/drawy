@@ -132,8 +132,23 @@ class ColorPicker {
         gradient.addColorStop(0.68, 'rgba(0, 0, 255, 1)');
         gradient.addColorStop(0.85, 'rgba(255, 0, 255, 1)');
         gradient.addColorStop(1, 'rgba(255, 0, 0, 1)');
+
+        // gradient.addColorStop(0, "rgba(255, 255, 255, 1)");
+        // gradient.addColorStop(0.5, "rgba(255, 255, 255, 0)");
+        // gradient.addColorStop(0.5, "rgba(0,     0,   0, 0)");
+        // gradient.addColorStop(1, "rgba(0,     0,   0, 1)");
         this.colorctx.fillStyle = gradient;
         this.colorctx.fill();
+
+        gradient = this.colorctx.createLinearGradient(0, 0, 0, this.colorStrip.height);
+
+        // gradient.addColorStop(0, "rgba(255, 255, 255, 1)");
+        // gradient.addColorStop(0.5, "rgba(255, 255, 255, 0)");
+        // gradient.addColorStop(0.5, "rgba(0,     0,   0, 0)");
+        // gradient.addColorStop(1, "rgba(0,     0,   0, 1)");
+
+        // this.colorctx.fillStyle = gradient;
+        // this.colorctx.fillRect(0, 0, this.colorctx.canvas.width, this.colorctx.canvas.height);
     }
 
     mousedown(e) {
@@ -159,11 +174,125 @@ class ColorPicker {
         this.selectedColor = 'rgba(' + imageData.data[0] + ',' + imageData.data[1] + ',' + imageData.data[2] + ',1)';
         // rgba(255, 0, 0, 1)
         this.colorLabel.style.backgroundColor = this.selectedColor;
+        document.getElementById("logo").setAttribute("style", `text-shadow: 1px 1px 5px ${this.selectedColor}`)
     }
 }
 
 
 
+
+/***/ }),
+
+/***/ "./src/components/imageUpload.js":
+/*!***************************************!*\
+  !*** ./src/components/imageUpload.js ***!
+  \***************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return ImageUpload; });
+class ImageUpload {
+    constructor() {
+        this.imageUpload = document.getElementById("image-upload");
+        this.currentImg;
+        this.images = []; // delete later
+
+        this.handleImageUpload = this.handleImageUpload.bind(this);
+        this.handleImageClick = this.handleImageClick.bind(this);
+
+        // this.existingUploads();
+
+        this.imageUpload.addEventListener("change", this.handleImageUpload);
+        document.getElementById('images').addEventListener("click", this.handleImageClick);
+    }
+
+    existingUploads() {
+        let img1 = document.createElement('img');
+        let img2 = document.createElement('img');
+        let img3 = document.createElement('img');
+        let img4 = document.createElement('img');
+        let img5 = document.createElement('img');
+        let img6 = document.createElement('img');
+        img1.src="./dist/images/pawprint-yellow.png";
+        img2.src="./dist/images/pawprint.png";
+        img3.src="./dist/images/heart.png";
+        img4.src="./dist/images/paw.png";
+        img5.src="./dist/images/bird-footprint-on-circle.png";
+        img6.src="./dist/images/animal-footprints.png";
+
+        // img1.crossOrigin = "Anonymous"
+        // img2.crossOrigin = "Anonymous"
+        // img3.crossOrigin = "Anonymous"
+        // img4.crossOrigin = "Anonymous"
+        // img5.crossOrigin = "Anonymous"
+        // img6.crossOrigin = "Anonymous"
+
+        img1.classList.add("upload");
+        img2.classList.add("upload");
+        img3.classList.add("upload");
+        img4.classList.add("upload");
+        img5.classList.add("upload");
+        img6.classList.add("upload");
+
+        this.images.push(img1);
+        document.getElementById('images').appendChild(img1);
+        
+        this.images.push(img2);
+        document.getElementById('images').appendChild(img2);
+
+        this.images.push(img3);
+        document.getElementById('images').appendChild(img3);
+
+        this.images.push(img4);
+        document.getElementById('images').appendChild(img4);
+
+        this.images.push(img5);
+        document.getElementById('images').appendChild(img5);
+
+        this.images.push(img6);
+        document.getElementById('images').appendChild(img6);
+    }
+
+    handleImageClick(e) {
+        let img = document.createElement('img');
+        img.src = e.target.src;
+        // img.crossOrigin = "Anonymous"
+
+        // remove 
+        let imgs = document.querySelectorAll('.upload');
+        imgs.forEach(ele => {
+            ele.classList.remove('img-selected');
+        });
+
+        // this.currentImg.classList.remove("img-selected");
+
+        img.classList.add("img-selected");
+
+        this.currentImg = img;
+        this.currentImg.classList.add("img-selected");
+    }
+
+    handleImageUpload(e) {
+        let files = e.target.files;
+        if (!files.length) return;
+        let file = files[0];
+        if (file.type !== '' && !file.type.match('image.*')) return;
+
+        window.URL = window.URL || window.webkitURL;
+
+        let imageSRC = window.URL.createObjectURL(file);
+       
+        let img = document.createElement('img');
+        img.src = imageSRC;
+        // img.crossOrigin = "Anonymous"
+
+        img.classList.add("upload");
+        document.getElementById('images').appendChild(img);
+        this.images.push(img); //delete later
+    }
+}
 
 /***/ }),
 
@@ -223,9 +352,7 @@ class SketchPad {
 
         this.dragging = false; // indicates if the mouse is held down
         this.loadStencils();
-        this.prepareNewShape();
-
-        this.suggestionsCompleted = true; // when you pick an img it will keep getting new suggestions 
+        this.prepareNewShape(); 
 
         // binds
         this.putPoint = this.putPoint.bind(this);
@@ -334,21 +461,37 @@ class SketchPad {
     }
 
     pickSuggestion(e) {
-        // debugger
-        // this.clear();
-        let image = new Image();
-        image.crossOrigin = "Anonymous";
-        image.src = e.target.src;
-        image.setAttribute('style', "width: 50px; height:50px;");
-        // image.setAttribute('height', 50);
+        try { 
+            // debugger
+            // this.clear();
+            let xMax = this.canvas.width;
+            let yMax = this.canvas.height;
 
-        image.backgroundColor = 'transparent';
-        image.onload = () => this.context.drawImage(
-            image, 
-            e.offsetX - 25,
-            e.offsetY - 25,
-            50 * (1 / 2 * this.context.lineWidth),
-            50 * (1 / 2 * this.context.lineWidth));
+            let xAv = (Math.max.apply(null, this.shapes[0]) + Math.min.apply(null, this.shapes[0])) / 2;
+            let yAv = (Math.max.apply(null, this.shapes[1]) + Math.min.apply(null, this.shapes[1])) / 2;
+
+            let w = 200;
+            let h = 200;
+
+            let image = new Image();
+            image.crossOrigin = "Anonymous";
+            image.src = e.target.src;
+            image.setAttribute('style', "width: 50px; height:50px;");
+            // image.setAttribute('height', 50);
+
+            // this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+            image.backgroundColor = 'transparent';
+            image.onload = () => this.context.drawImage(
+                image, 
+                e.offsetX - 25,
+                e.offsetY - 25,
+                50 * (1 / 2 * this.context.lineWidth),
+                50 * (1 / 2 * this.context.lineWidth));
+
+
+        } catch {
+            console.log("sugesstions are not completed.")
+        }        
     }
     ///////
 
@@ -396,10 +539,20 @@ class SketchPad {
             this.context.strokeStyle = this.tool.colorPicker.selectedColor;
             this.context.lineCap = "round";
 
-            this.context.lineTo(e.offsetX, e.offsetY);
-            this.context.stroke(); // nothing will show untill we do stroke() or fill()
-            this.context.beginPath(); 
-            this.context.moveTo(e.offsetX, e.offsetY); // sets an active point
+            if (this.tool.imageUpload.currentImg) {
+                this.context.drawImage(
+                    this.tool.imageUpload.currentImg,
+                    e.offsetX - 25,
+                    e.offsetY - 25,
+                    50 * (1 / 2 * brushWidth.value),
+                    50 * (1 / 2 * brushWidth.value)
+                );
+            } else {
+                this.context.lineTo(e.offsetX, e.offsetY);
+                this.context.stroke(); // nothing will show untill we do stroke() or fill()
+                this.context.beginPath(); 
+                this.context.moveTo(e.offsetX, e.offsetY); // sets an active point
+            }
 
             // save the coords to the current shape
             this.storeCoordinates(e.offsetX, e.offsetY, Date.now() - this.pressedAt);
@@ -424,6 +577,7 @@ class SketchPad {
     colorFill() {
         this.context.fillStyle = this.tool.colorPicker.selectedColor;
         this.context.fillRect(0, 0, canvas.width, canvas.height);
+        // this.saveState();
     }
 
     clear(e) {
@@ -438,7 +592,9 @@ class SketchPad {
 
         this.shapes = [];
         this.drawSuggestions.innerHTML = '';
-        this.suggestionsCompleted = true;
+
+        document.getElementById("draw-suggestions").innerHTML = "";
+        // this.suggestionsCompleted = true;
     }
 }
 
@@ -454,12 +610,10 @@ class SketchPad {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Tool; });
-/* harmony import */ var _colorPicker__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./colorPicker */ "./src/components/colorPicker.js");
-
-
 class Tool {
-    constructor(colorPicker, BrushPicker) {
+    constructor(colorPicker, imageUpload) {
         this.colorPicker = colorPicker;
+        this.imageUpload = imageUpload;
     }
 }
 
@@ -487,18 +641,21 @@ module.exports = JSON.parse("{\"balloon\":[{\"src\":\"https://storage.googleapis
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_sketchPad__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./components/sketchPad */ "./src/components/sketchPad.js");
 /* harmony import */ var _components_colorPicker__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./components/colorPicker */ "./src/components/colorPicker.js");
-/* harmony import */ var _components_tool__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./components/tool */ "./src/components/tool.js");
+/* harmony import */ var _components_imageUpload__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./components/imageUpload */ "./src/components/imageUpload.js");
+/* harmony import */ var _components_tool__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./components/tool */ "./src/components/tool.js");
+
 
 
 
 
 document.addEventListener("DOMContentLoaded", () => {
     const canvas = document.getElementById("canvas");
-    canvas.setAttribute('width', 800);
-    canvas.setAttribute('height', 800);
+    canvas.setAttribute('width', 400);
+    canvas.setAttribute('height', 400);
     // tools goes here, and then will pass it as a second arg to the cnavas
     const colorPicker = new _components_colorPicker__WEBPACK_IMPORTED_MODULE_1__["default"]();
-    const tool = new _components_tool__WEBPACK_IMPORTED_MODULE_2__["default"](colorPicker);
+    const imageUpload = new _components_imageUpload__WEBPACK_IMPORTED_MODULE_2__["default"]();
+    const tool = new _components_tool__WEBPACK_IMPORTED_MODULE_3__["default"](colorPicker, imageUpload);
     new _components_sketchPad__WEBPACK_IMPORTED_MODULE_0__["default"](canvas, tool);
 });
 

@@ -7,31 +7,44 @@
     <link rel="stylesheet" href="./dist/styles/reset.css">
     <link rel="stylesheet" href="./dist/styles/main.css">
     <link rel="stylesheet" href="./dist/styles/color-picker.css">
+    <link href="https://fonts.googleapis.com/css?family=Indie+Flower&display=swap" rel="stylesheet">
     <title>Drawy</title>
 </head>
 <body>
     <div id="app-main">
         <div id="main-nav">
-            <h1>Drawy</h1>
+            <h1 id="logo">Drawy</h1>
         </div>
 
         <div class="app-body">
             <div id="toolbar">
                 <div class="tool-pencil tool-icon">
-                    <img src="./dist/images/pencil.png" alt="">
+                    <img src="./dist/images/pencil.png" alt="" class="tool-hover">
                     <div class="brush-slider">
-                        <!-- <img src="./dist/images/brush-width.png" alt="" id="brush-slider-img"> -->
-                        <input type="range" id="brush-size" min="1" max="68" step="1" value="23">
+                        <img src="./dist/images/brush-width.png" alt="" id="brush-slider-img">
+                        <input type="range" id="brush-size" min="1" max="68" step="1" value="5">
                     </div>
                 </div>  
-                <div class="tool-shape tool-icon">
-                    <img src="./dist/images/shape.png" alt="">
+                <div class="tool-resize tool-icon">
+                    <img src="./dist/images/pointer.png" alt="" class="tool-hover">
                 </div>
                 <div id="color-fill" class="tool-fill tool-icon">
-                    <img src="./dist/images/color-filler.png" alt="">
+                    <img src="./dist/images/color-filler.png" alt="" class="tool-hover">
                 </div>
                 <div class="tool-image-upload tool-icon">
-                    <button>upload</button>
+                    <!-- <button>upload</button> -->
+                    <label class="image-upload-label">
+                        <img src="./dist/images/tree.png" alt="upload an image" class="tool-hover">
+                        <input type="file" id="image-upload" accept="image/jpeg, image/png, image/jpg, image/webp">
+                    </label>
+                    <div id="images">
+                        <img src="./dist/images/pawprint-yellow.png" alt="" class="upload">
+                        <img src="./dist/images/pawprint.png" alt="" class="upload">
+                        <img src="./dist/images/heart.png" alt="" class="upload">
+                        <img src="./dist/images/paw.png" alt="" class="upload">
+                        <img src="./dist/images/bird-footprint-on-circle.png" alt="" class="upload">
+                        <img src="./dist/images/animal-footprints.png" alt="" class="upload">
+                    </div>
                 </div>  
                 <!-- <div class="tool-footprint tool-icon">
                     <button>footprint</button>
@@ -40,29 +53,32 @@
                     <div style="background-color: #58d33a" class="current-color" id="color-label"></div>
                     <!-- <input type="checkbox" id="color-input" checked></input> -->
                     <div class="color-picker">
-                        <canvas id="color-strip" height="46" width="250"></canvas>
+                        <canvas id="color-strip" height="40" width="250"></canvas>
                     </div>
                 </div>
                 <div class="tool-undo tool-icon tool-action">
-                    <img src="./dist/images/undo.png" alt="" id="undo-btn">
+                    <img src="./dist/images/undo.png" alt="" id="undo-btn" class="tool-hover">
                 </div>
                 <div class="tool-redo tool-icon tool-action">
-                    <button id="redo-btn">redo</button>
+                    <!-- <button id="redo-btn">redo</button> -->
+                    <img src="./dist/images/redo.png" alt="" id="redo-btn" class="tool-hover">
                 </div>
                 <div class="tool-eraser tool-icon tool-action">
-                    <button>eraser</button>
+                    <!-- <button>eraser</button> -->
+                    <img src="./dist/images/eraser.png" alt="" class="tool-hover">
                 </div>
-                <div class="tool-zoom tool-icon tool-action">
+                <!-- <div class="tool-zoom tool-icon tool-action">
                     <img src="./dist/images/zoom.png" alt="">
-                </div>
+                </div> -->
                 <div id="clear-canvas-btn" class="tool-clear tool-icon tool-action">
-                    <img src="./dist/images/delete.png" alt="">
+                    <img src="./dist/images/delete.png" alt="" class="tool-hover">
                 </div>
             </div>
             <div id="canvas-container">
                 <canvas id="canvas"></canvas>
             </div>
-            <div>
+
+            <div class="suggestions-div-wrapper">
                 <p>Ain't got talent? Choose from here:</p>
                 <div id="draw-suggestions">
                 </div>

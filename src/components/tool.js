@@ -1,7 +1,6 @@
-import "./colorPicker";
-
 export default class Tool {
-    constructor(colorPicker, BrushPicker) {
+    constructor(colorPicker, imageUpload) {
         this.colorPicker = colorPicker;
+        this.imageUpload = imageUpload;
     }
 }

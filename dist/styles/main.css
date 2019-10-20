@@ -21,6 +21,16 @@ html {
     justify-content: space-between;
 }
 
+#logo {
+    font-family: "Indie Flower", cursive;
+    font-size: 36px;
+    /* margin: 25px 0 0 10px;
+    padding: 15px; */
+    margin-left: 20px;
+    margin-top: 10px;
+    text-shadow: 1px 1px 5px #58d33a;
+}
+
 .tool-icon img{
     width: 42px;
     height: 42px;
@@ -35,26 +45,21 @@ html {
     margin-top: 30px;
     margin-bottom: 30px;
     margin-left: 0.9rem;
+    display: flex;
+    flex-direction: row;
+    width: 400px;
 }
 
 #toolbar {
-    top: 14vh;
+    /* top: 14vh;
     width: 4.5rem;
-    left: 2rem;
+    left: 2rem; */
     text-align: center;
     display: flex;
     flex-direction: column;
     margin-top: 50px;
-}
-
-.tool-action:hover {
-    cursor: pointer;
-    /* height: 42px;
-    width: 42px;
-    border-radius: 50%;
-    left: 2rem;
-    margin-bottom: 10px;
-    box-shadow:inset 0 0 0 99999px rgba(0, 0, 0, 0.267); */
+    width: 70px;
+    padding: 10px;
 }
 
 .tool-icon:hover {
@@ -72,49 +77,45 @@ html {
     background-color: #000;
 } */
 
-/* #brush-slider-img {
-    width: 123px;
-    height: 1.5rem;
-    border: none;
-    box-shadow: none;
-    border-radius: 0;
-    background-color: #ededee;
-} */
-
 .tool-pencil {
     display: flex;
     flex-direction: row;
+    margin-left: 14px;
 }
 
 /* .tool-color {
     display: flex;
     flex-direction: row;
+    width: 400px;
 } */
 
 .color-picker {
-    height: 42px;
+    height: 40px;
     width: 250px;
     border: 2px solid #ffff;
     border-radius: 20px;
+    margin-left: 15px;
 }
 
-#brush-size {
+/* #brush-size {
     -webkit-appearance: none;
     background: url("../images/brush-width.png") center no-repeat;
     background-size: 123px 24px;
     outline: none;
-}
+    margin-left: 10px;
+} */
 
 #color-strip {
     border-radius: 20px;
 }
 
 #draw-suggestions {
-    height: 400px;
-    width: 400px;
+    height: 350px;
+    width: 290px;
     background-color: #ffffff;
     overflow-y: scroll;
     display: inline-block;
+    margin-right: 20px;
 }
 
 #draw-suggestions img {
@@ -124,4 +125,112 @@ html {
     border: 1px solid black;
     background-color: transparent;
     cursor: pointer;
+}
+
+.img-selected {
+    box-shadow: 0px 0px 10px 2px black;
+}
+
+.tool-hover:hover {
+    cursor: pointer;
+    box-shadow:inset 0 0 0 99999px rgba(0, 0, 0, 0.267);
+
+}
+
+.suggestions-div-wrapper p {
+    font-family: "Indie Flower", cursive;
+}
+
+.brush-slider {
+    margin-top: 8px;
+    position: relative;
+    margin-left: 15px;
+}
+
+#brush-slider-img {
+    /* width: 160px;
+    border: none;
+    box-shadow: none;
+    border-radius: 0;
+    background-color: #ededee; */
+
+    width: 109%;
+    /* left: -4%; */
+    position: absolute;
+    pointer-events: none;
+    z-index: -1;
+    transform: translateY(-23%);
+    border: none;
+    box-shadow: none;
+    border-radius: 0;
+    background-color: #ededee;
+    margin-top: 4px;
+}
+
+#brush-size {
+    /* width: 100%;
+    height: 1.5rem; */
+    -webkit-appearance: none;
+    outline: none;
+    margin: 9px 0;
+    background-color: transparent;
+}
+
+/* #canvas {
+    display: none;
+} */
+
+
+/* input[type=range]::-webkit-slider-runnable-track {
+  width: 100%;
+  height: 8.4px;
+  cursor: pointer;
+  box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+  background: #3071a9;
+  border-radius: 1.3px;
+  border: 0.2px solid #010101;
+}
+
+input[type=range]:focus::-webkit-slider-runnable-track {
+  background: #367ebd;
+} */
+
+.tool-image-upload {
+    display: flex;
+    flex-direction: row;
+    margin-left: 14px;
+}
+
+#images {
+    display: flex;
+    flex-direction: row;
+    margin-left: 15px;
+    /* border: 2px solid rgba(110, 107, 107, 0.37); */
+    border-radius: 40px;
+    align-items: center;
+    height: 42px;
+    background-color: rgba(110, 107, 107, 0.37);
+    /* box-shadow: 0.1rem 0.1rem 0 rgba(36, 35, 35, 0.37); */
+    padding: 2px;
+    /* width: 262px; */
+    z-index: 1;
+
+    /* overflow-x: scroll;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    white-space: nowrap; */
+}
+
+/* #images div {
+    display: inline-block;
+} */
+
+#images img {
+    width: 35px;
+    height: 35px;
+    margin-bottom: 0;
+    border: none;
+    box-shadow: none;
+    padding: 2px;
+    margin: 2px;
 }
