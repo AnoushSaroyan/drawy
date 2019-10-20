@@ -1,6 +1,8 @@
 const API_ENDPOINT = 'https://inputtools.google.com/request?ime=handwriting&app=autodraw&dbg=1&cs=1&oe=UTF-8';
 const STENCILS_ENDPOINT = 'src/data/stencils.json';
 const stencils = require("../data/stencils.json");
+window.stencils = stencils;
+
 
 export default class SketchPad {
     constructor(canvas, tool) {
@@ -74,6 +76,7 @@ export default class SketchPad {
         this.determineCurrentBrush = this.determineCurrentBrush.bind(this);
         this.handleEraserIconClick = this.handleEraserIconClick.bind(this);
         this.download = this.download.bind(this);
+        this.prepareStencil = this.prepareStencil.bind(this);
 
         // draw events
         this.canvas.addEventListener("mousedown", this.engage);
@@ -103,6 +106,22 @@ export default class SketchPad {
     //     this.currentBrush = "regular";
     //     this.context.lineCap = "round";
     // }
+
+    prepareStencil(image) {
+        const paths = document.getElementsByTagName("path");
+
+        debugger
+
+        Array.from(paths).forEach(path => {
+            const style = window.getComputedStyle(path);
+            const fill = style.getPropertyValue("fill");
+            console.log(fill);
+            if (fill === "rgb(255, 255, 255)") {
+                path.parentElement.removeChild(path);
+
+            }
+        })
+    }
 
     handleEraserIconClick(e) {
         document.getElementById("eraser-icon").setAttribute("style", "background-color: black; box-shadow: none;");
@@ -142,6 +161,8 @@ export default class SketchPad {
             this.currentBrush = "image"
         } else if (document.getElementById("brush-icon").classList.contains("selected")) {
             this.currentBrush = "regular";
+        } else if (document.getElementById("eraser-icon").classList.contains("selected")) {
+            this.currentBrush = "eraser";
         }
     }
 
@@ -235,8 +256,11 @@ export default class SketchPad {
             let image = new Image();
             image.crossOrigin = "Anonymous";
             image.src = e.target.src;
-            image.setAttribute('style', "width: 50px; height:50px;");
-            // image.setAttribute('height', 50);
+            // image.setAttribute('style', "width: 50px; height:50px;");
+            
+            this.prepareStencil(image);
+
+            debugger
 
             // this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
             image.backgroundColor = 'transparent';
@@ -362,6 +386,7 @@ export default class SketchPad {
     }
 
     colorFill() {
+        this.saveState();
         this.context.fillStyle = this.tool.colorPicker.selectedColor;
         this.context.fillRect(0, 0, canvas.width, canvas.height);
         // this.saveState();
