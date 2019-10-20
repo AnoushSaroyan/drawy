@@ -28,6 +28,9 @@ export default class SketchPad {
         // suggestions section
         this.drawSuggestions = document.getElementById("draw-suggestions");
 
+        // download btn
+        this.downloadBtn = document.getElementById("download-btn");
+
         // list for undo and redo 
         this.undoList = [];
         this.redoList = [];
@@ -41,6 +44,11 @@ export default class SketchPad {
 
         // stencils 
         this.stencils = stencils;
+
+        // current brush
+        this.currentBrush ="regular";
+
+        // this.initCurrentBrush();
 
         this.dragging = false; // indicates if the mouse is held down
         this.loadStencils();
@@ -62,6 +70,10 @@ export default class SketchPad {
         this.storeCoordinates = this.storeCoordinates.bind(this);
         this.commitCurrentShape = this.commitCurrentShape.bind(this);
         this.pickSuggestion = this.pickSuggestion.bind(this);
+        this.handleBrushIconClick = this.handleBrushIconClick.bind(this);
+        this.determineCurrentBrush = this.determineCurrentBrush.bind(this);
+        this.handleEraserIconClick = this.handleEraserIconClick.bind(this);
+        this.download = this.download.bind(this);
 
         // draw events
         this.canvas.addEventListener("mousedown", this.engage);
@@ -76,6 +88,61 @@ export default class SketchPad {
         this.undoBtn.addEventListener("click", this.undo);
         this.redoBtn.addEventListener("click", this.redo);
         this.drawSuggestions.addEventListener("click", this.pickSuggestion);
+        this.downloadBtn.addEventListener("click", this.download);
+
+
+        document.getElementById("eraser-icon").addEventListener("click", this.handleEraserIconClick);
+        document.getElementById("brush-icon").addEventListener("click", this.handleBrushIconClick);
+
+        document.getElementById("brush-icon").addEventListener("mouseover", () => { document.getElementById("brush-slider-div").setAttribute("style", "display: block") });
+        // document.getElementById("brush-slider-div").addEventListener("change", () => { document.getElementById("brush-slider-div").setAttribute("style", "display: hide") })
+        // document.getElementById("brush-icon").addEventListener("mouseout", () => { document.getElementById("brush-slider-div").setAttribute("style", "display: hide") });
+    }
+
+    // initCurrentBrush() {
+    //     this.currentBrush = "regular";
+    //     this.context.lineCap = "round";
+    // }
+
+    handleEraserIconClick(e) {
+        document.getElementById("eraser-icon").setAttribute("style", "background-color: black; box-shadow: none;");
+        document.getElementById("eraser-icon").src = "../../dist/images/eraser-on.png";
+        document.getElementById("eraser-icon").classList.add("selected");
+
+        document.getElementById("upload-icon").setAttribute("style", "background-color: white; box-shadow: 0.1rem 0.1rem 0 rgba(0,0,0,0.25);");
+        document.getElementById("upload-icon").src = "../../dist/images/tree.png";
+        document.getElementById("upload-icon").classList.remove("selected");
+
+        document.getElementById("brush-icon").setAttribute("style", "background-color: white; box-shadow: 0.1rem 0.1rem 0 rgba(0,0,0,0.25);");
+        document.getElementById("brush-icon").src = "../../dist/images/pencil.png";
+        document.getElementById("brush-icon").classList.remove("selected");
+        this.currentBrush = "eraser";
+    }
+
+    handleBrushIconClick(e) {
+        document.getElementById("brush-icon").setAttribute("style", "background-color: black; box-shadow: none;");
+        document.getElementById("brush-icon").src = "../../dist/images/pencil-on.png";
+        document.getElementById("brush-icon").classList.add("selected");
+
+        document.getElementById("upload-icon").setAttribute("style", "background-color: white; box-shadow: 0.1rem 0.1rem 0 rgba(0,0,0,0.25);");
+        document.getElementById("upload-icon").src = "../../dist/images/tree.png";
+        document.getElementById("upload-icon").classList.remove("selected");
+
+        document.getElementById("eraser-icon").setAttribute("style", "background-color: white; box-shadow: 0.1rem 0.1rem 0 rgba(0,0,0,0.25);");
+        document.getElementById("eraser-icon").src = "../../dist/images/eraser.png";
+        document.getElementById("eraser-icon").classList.remove("selected");
+
+        this.currentBrush === "regular";
+    }
+
+    determineCurrentBrush() {
+        // const uploadIcon = document.getElementById("upload-icon");
+        // const brushIcon = document.getElementById("brush-icon");
+        if (document.getElementById("upload-icon").classList.contains("selected")) {
+            this.currentBrush = "image"
+        } else if (document.getElementById("brush-icon").classList.contains("selected")) {
+            this.currentBrush = "regular";
+        }
     }
 
     loadStencils() {
@@ -177,10 +244,10 @@ export default class SketchPad {
                 image, 
                 e.offsetX - 25,
                 e.offsetY - 25,
-                50 * (1 / 2 * this.context.lineWidth),
-                50 * (1 / 2 * this.context.lineWidth));
-
-
+                // 50 * (1 / 2 * this.context.lineWidth),
+                // 50 * (1 / 2 * this.context.lineWidth));
+                50 * (1 / 2 * 10),
+                50 * (1 / 2 * 10));
         } catch {
             console.log("sugesstions are not completed.")
         }        
@@ -224,14 +291,23 @@ export default class SketchPad {
     putPoint(e) {
         const brushWidth = document.getElementById("brush-size");
         // current collor goes here
+        // const uploadIcon = document.getElementById("upload-icon");
+        // const brushIcon = document.getElementById("brush-icon");
+
+        this.determineCurrentBrush();
 
         if(this.dragging) {
             this.context.lineWidth = brushWidth.value;
             // this.context.strokeStyle = "#58d33a";
             this.context.strokeStyle = this.tool.colorPicker.selectedColor;
-            this.context.lineCap = "round";
 
-            if (this.tool.imageUpload.currentImg) {
+            if( this.currentBrush === "regular") {
+                this.context.lineCap = "round";
+                this.context.lineTo(e.offsetX, e.offsetY);
+                this.context.stroke(); // nothing will show untill we do stroke() or fill()
+                this.context.beginPath(); 
+                this.context.moveTo(e.offsetX, e.offsetY); // sets an active point
+            } else if (this.currentBrush === "image"){ // current brush is "image"
                 this.context.drawImage(
                     this.tool.imageUpload.currentImg,
                     e.offsetX - 25,
@@ -239,12 +315,31 @@ export default class SketchPad {
                     50 * (1 / 2 * brushWidth.value),
                     50 * (1 / 2 * brushWidth.value)
                 );
-            } else {
+            } else if (this.currentBrush === "eraser") {
+                // debugger
+                this.context.strokeStyle = "white";
+                this.context.lineCap = "round";
                 this.context.lineTo(e.offsetX, e.offsetY);
                 this.context.stroke(); // nothing will show untill we do stroke() or fill()
-                this.context.beginPath(); 
+                this.context.beginPath();
                 this.context.moveTo(e.offsetX, e.offsetY); // sets an active point
             }
+
+            // if (this.tool.imageUpload.currentImg) {
+            //     debugger
+            //     this.context.drawImage(
+            //         this.tool.imageUpload.currentImg,
+            //         e.offsetX - 25,
+            //         e.offsetY - 25,
+            //         50 * (1 / 2 * brushWidth.value),
+            //         50 * (1 / 2 * brushWidth.value)
+            //     );
+            // } else {
+            //     this.context.lineTo(e.offsetX, e.offsetY);
+            //     this.context.stroke(); // nothing will show untill we do stroke() or fill()
+            //     this.context.beginPath(); 
+            //     this.context.moveTo(e.offsetX, e.offsetY); // sets an active point
+            // }
 
             // save the coords to the current shape
             this.storeCoordinates(e.offsetX, e.offsetY, Date.now() - this.pressedAt);
@@ -287,5 +382,13 @@ export default class SketchPad {
 
         document.getElementById("draw-suggestions").innerHTML = "";
         // this.suggestionsCompleted = true;
+    }
+
+    download(e) {
+        const canvaschik = this.canvas.toDataURL('image/png');
+        const link = document.createElement('a');
+        link.setAttribute('download', 'drawy.png');
+        link.setAttribute('href', canvaschik);
+        link.click();
     }
 }

@@ -6,6 +6,7 @@ export default class ImageUpload {
 
         this.handleImageUpload = this.handleImageUpload.bind(this);
         this.handleImageClick = this.handleImageClick.bind(this);
+        this.handleOtherIcons = this.handleOtherIcons.bind(this);
 
         // this.existingUploads();
 
@@ -76,7 +77,26 @@ export default class ImageUpload {
         img.classList.add("img-selected");
 
         this.currentImg = img;
-        this.currentImg.classList.add("img-selected");
+        // this.currentImg.classList.add("img-selected");
+        this.currentImg.setAttribute("style", "border: 1px solid black");
+
+        document.getElementById("upload-icon").classList.add("selected"); // this is the selected action from the toolbar
+        // document.getElementById("upload-icon").classList.add("uplod-icon-selected-style");
+        document.getElementById("upload-icon").setAttribute("style", "background-color: black; box-shadow: none;");
+        document.getElementById("upload-icon").src = "../../dist/images/tree-on.png";
+
+        // reset the regular styling of the other icons
+        this.handleOtherIcons();
+    }
+
+    handleOtherIcons() {
+        document.getElementById("brush-icon").setAttribute("style", "background-color: white; box-shadow: 0.1rem 0.1rem 0 rgba(0,0,0,0.25);");
+        document.getElementById("brush-icon").src = "../../dist/images/pencil.png";
+        document.getElementById("brush-icon").classList.remove("selected");
+
+        document.getElementById("eraser-icon").setAttribute("style", "background-color: white; box-shadow: 0.1rem 0.1rem 0 rgba(0,0,0,0.25);");
+        document.getElementById("eraser-icon").src = "../../dist/images/eraser.png";
+        document.getElementById("eraser-icon").classList.remove("selected");
     }
 
     handleImageUpload(e) {
