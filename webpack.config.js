@@ -25,12 +25,23 @@ module.exports = {
                         url: true
                     }
                 }]
+            },
+            {
+                test: /\.json$/,
+                exclude: /(node_modules)/,
+                loader: "json-loader"
             }
         ]
     },
     devtool: 'source-map',
     resolve: {
-        extensions: [".js", "*"]
+        extensions: ['.webpack.js', '.web.js', '.js']
+    },
+    node: {
+        console: true,
+        fs: 'empty',
+        net: 'empty',
+        tls: 'empty'
     }
 };
 
