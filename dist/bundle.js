@@ -67361,25 +67361,29 @@ class SketchPad {
                 response;
                 error;
                 body;
+                imgURL
                 // debugger
                 const parser = new DOMParser();
                 const xmlDoc = parser.parseFromString(body, 'text/html');
 
                 const paths = xmlDoc.getElementsByTagName("path");
                 let svg = xmlDoc.querySelector('svg');
-                // debugger
+
+                debugger
 
                 Array.from(paths).forEach(path => {
-                    // debugger
-                    const style = window.getComputedStyle(path);
-                    const fill = style.getPropertyValue("fill");
+                    debugger
+                    // const style = window.getComputedStyle(path);
+                    // const fill = style.getPropertyValue("fill");
+                    const fill = svg.style.getPropertyValue("fill");
+                    debugger
 
                     path.setAttribute("style", `stroke: ${this.tool.colorPicker.selectedColor}`);
                     console.log(fill);
                     // debugger
-                    if (fill === "rgb(255, 255, 255)") {
+                    if (fill === "#fff") {
                         path.parentElement.removeChild(path);
-                        // debugger
+                        debugger
                     }
                 })
 
@@ -67393,6 +67397,7 @@ class SketchPad {
 
                 // prepend a "header"
                 var image64 = b64Start + svg64;
+                debugger
 
                 // set it as the source of the img element
                 newImg.src = image64;
@@ -67567,7 +67572,7 @@ class SketchPad {
     }
 
     download(e) {
-        const canvaschik = this.canvas.toDataURL('image/png');
+        const canvaschik = this.canvas.toDataURL(); // default png
         const link = document.createElement('a');
         link.setAttribute('download', 'drawy.png');
         link.setAttribute('href', canvaschik);
