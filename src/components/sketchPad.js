@@ -1,8 +1,9 @@
 const API_ENDPOINT = 'https://inputtools.google.com/request?ime=handwriting&app=autodraw&dbg=1&cs=1&oe=UTF-8';
-const STENCILS_ENDPOINT = 'src/data/stencils.json';
-const stencils = require("../data/stencils.json");
-window.stencils = stencils;
-
+// const STENCILS_ENDPOINT = 'src/data/stencils.json';
+// const stencils = require("../data/stencils.json");
+const request = require('request');
+// const request = require('http').request;
+// window.stencils = stencils;
 
 export default class SketchPad {
     constructor(canvas, tool) {
@@ -45,7 +46,7 @@ export default class SketchPad {
         this.pressedAt = 0;
 
         // stencils 
-        this.stencils = stencils;
+        // this.stencils = stencils;
 
         // current brush
         this.currentBrush ="regular";
@@ -77,6 +78,7 @@ export default class SketchPad {
         this.handleEraserIconClick = this.handleEraserIconClick.bind(this);
         this.download = this.download.bind(this);
         this.prepareStencil = this.prepareStencil.bind(this);
+        // this.translateSVGToInlineSVG = this.translateSVGToInlineSVG.bind(this);
 
         // draw events
         this.canvas.addEventListener("mousedown", this.engage);
@@ -106,22 +108,6 @@ export default class SketchPad {
     //     this.currentBrush = "regular";
     //     this.context.lineCap = "round";
     // }
-
-    prepareStencil(image) {
-        const paths = document.getElementsByTagName("path");
-
-        debugger
-
-        Array.from(paths).forEach(path => {
-            const style = window.getComputedStyle(path);
-            const fill = style.getPropertyValue("fill");
-            console.log(fill);
-            if (fill === "rgb(255, 255, 255)") {
-                path.parentElement.removeChild(path);
-
-            }
-        })
-    }
 
     handleEraserIconClick(e) {
         document.getElementById("eraser-icon").setAttribute("style", "background-color: black; box-shadow: none;");
@@ -176,19 +162,20 @@ export default class SketchPad {
 
         iconList.forEach(icon => {
             // debugger
-            if (icon in this.stencils) {
+            if (icon in window.stencils) {
+                // debugger
                 // each icon has different versions of drawing
-                this.stencils[icon].forEach(type => {
+                window.stencils[icon].forEach(type => {
                     // debugger
                     // let img = new Image();
                     // img.crossOrigin = "Anonymous"
                     // img.src = type.src;
-                    this.drawSuggestions.innerHTML += '<img src="' + type.src + '" crossOrigin="Anonymous" />';
+                    this.drawSuggestions.innerHTML += '<img class="img-svg" src="' + type.src + '" crossOrigin="Anonymous" />';
                 });
             }
-
-            // debugger
         });
+
+        // this.translateSVGToInlineSVG();
     }
 
     loadSuggestionsFromAPI(shapes) {
@@ -240,38 +227,195 @@ export default class SketchPad {
         // displaySuggestions goes here
     }
 
+    // translateSVGToInlineSVG() {
+    //     document.querySelectorAll('.img-svg').forEach((el) => {
+    //         const imgID = el.getAttribute('id');
+    //         const imgClass = el.getAttribute('class');
+    //         const imgURL = el.getAttribute('src');
+
+    //         // debugger
+
+    //         request(imgURL, (error, response, body) => { 
+    //             response;
+    //             error;
+    //             body;
+    //             // debugger
+    //             const parser = new DOMParser();
+    //             const xmlDoc = parser.parseFromString(body, 'text/html');
+
+    //             const paths = xmlDoc.getElementsByTagName("path");
+    //             let svg = xmlDoc.querySelector('svg');
+    //             debugger
+
+    //             Array.from(paths).forEach(path => {
+    //                 const style = window.getComputedStyle(path);
+    //                 const fill = style.getPropertyValue("fill");
+    //                 path.setAttribute("style", "stroke: blue");
+    //                 console.log(fill);
+    //                 if (fill === "rgb(255, 255, 255)") {
+    //                     path.parentElement.removeChild(path);
+
+    //                 }
+    //             })
+
+    //             if (typeof imgID !== 'undefined') {
+    //                 svg.setAttribute('id', imgID);
+    //             }
+
+    //             if (typeof imgClass !== 'undefined') {
+    //                 svg.setAttribute('class', imgClass + ' replaced-svg');
+    //             }
+
+    //             svg.removeAttribute('xmlns:a');
+
+    //             el.parentNode.replaceChild(svg, el);
+    //         })
+    //     });
+    // }
+
+    prepareStencil(imgURL) {
+        // <object id="svg-object" data="path/to/external.svg" type="image/svg+xml"></object>
+        
+        // let obj = document.createElement('object');
+        // obj.id = "svg-obj";
+        // obj.data = image.src;
+        // obj.type = "image/svg+xml";
+
+        request(imgURL, (error, response, body) => {
+            response;
+            error;
+            body;
+            debugger
+            const parser = new DOMParser();
+            const xmlDoc = parser.parseFromString(body, 'text/html');
+
+            const paths = xmlDoc.getElementsByTagName("path");
+            // let svg = xmlDoc.querySelector('svg');
+            debugger
+
+            Array.from(paths).forEach(path => {
+                debugger
+                const style = window.getComputedStyle(path);
+                const fill = style.getPropertyValue("fill");
+
+                path.setAttribute("style", "stroke: blue");
+                console.log(fill);
+                debugger
+                if (fill === "rgb(255, 255, 255)") {
+                    path.parentElement.removeChild(path);
+                    debugger
+                }
+            })
+        });
+    }
+
     pickSuggestion(e) {
         try { 
             // debugger
             // this.clear();
-            let xMax = this.canvas.width;
-            let yMax = this.canvas.height;
+            // let xMax = this.canvas.width;
+            // let yMax = this.canvas.height;
 
-            let xAv = (Math.max.apply(null, this.shapes[0]) + Math.min.apply(null, this.shapes[0])) / 2;
-            let yAv = (Math.max.apply(null, this.shapes[1]) + Math.min.apply(null, this.shapes[1])) / 2;
+            // let xAv = (Math.max.apply(null, this.shapes[0]) + Math.min.apply(null, this.shapes[0])) / 2;
+            // let yAv = (Math.max.apply(null, this.shapes[1]) + Math.min.apply(null, this.shapes[1])) / 2;
 
-            let w = 200;
-            let h = 200;
+            // let w = 200;
+            // let h = 200;
 
             let image = new Image();
             image.crossOrigin = "Anonymous";
             image.src = e.target.src;
+            image.className = "img-svg";
             // image.setAttribute('style', "width: 50px; height:50px;");
             
-            this.prepareStencil(image);
+            // this.prepareStencil(image);
 
-            debugger
+            // debugger
+            // remove the white background and fill with the current color
+            ////////////
+            // const imgID = image.getAttribute('id');
+            // const imgClass = image.getAttribute('class');
+            const imgURL = image.getAttribute('src');
+
+            // debugger
+
+            request(imgURL, (error, response, body) => {
+                response;
+                error;
+                body;
+                imgURL
+                // debugger
+                const parser = new DOMParser();
+                const xmlDoc = parser.parseFromString(body, 'text/html');
+
+                const paths = xmlDoc.getElementsByTagName("path");
+                let svg = xmlDoc.querySelector('svg');
+
+                debugger
+
+                Array.from(paths).forEach(path => {
+                    debugger
+                    // const style = window.getComputedStyle(path);
+                    // const fill = style.getPropertyValue("fill");
+                    const fill = svg.style.getPropertyValue("fill");
+                    debugger
+
+                    path.setAttribute("style", `stroke: ${this.tool.colorPicker.selectedColor}`);
+                    console.log(fill);
+                    // debugger
+                    if (fill === "#fff") {
+                        path.parentElement.removeChild(path);
+                        debugger
+                    }
+                })
+
+                let newImg = new Image();
+                // get svg data
+                let xml = new XMLSerializer().serializeToString(svg);
+
+                // make it base64
+                var svg64 = btoa(xml);
+                var b64Start = 'data:image/svg+xml;base64,';
+
+                // prepend a "header"
+                var image64 = b64Start + svg64;
+                debugger
+
+                // set it as the source of the img element
+                newImg.src = image64;
+
+                newImg.onload = () => { 
+                    debugger
+                    this.context.drawImage(
+                    newImg, 10, 10
+                    // e.offsetX - 25,
+                    // e.offsetY - 25,
+                    // // 50 * (1 / 2 * this.context.lineWidth),
+                    // // 50 * (1 / 2 * this.context.lineWidth));
+                    // 50 * (1 / 2 * 10),
+                    // 50 * (1 / 2 * 10)
+                    )};
+
+                this.saveState();   
+
+                // image.parentNode.replaceChild(svg, image);
+            });
+            ///////////
 
             // this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
-            image.backgroundColor = 'transparent';
-            image.onload = () => this.context.drawImage(
-                image, 
-                e.offsetX - 25,
-                e.offsetY - 25,
-                // 50 * (1 / 2 * this.context.lineWidth),
-                // 50 * (1 / 2 * this.context.lineWidth));
-                50 * (1 / 2 * 10),
-                50 * (1 / 2 * 10));
+            // image.onload = () => { 
+                
+            // debugger
+            //     this.context.drawImage(
+            //     image, 
+            //     e.offsetX - 25,
+            //     e.offsetY - 25,
+            //     // 50 * (1 / 2 * this.context.lineWidth),
+            //     // 50 * (1 / 2 * this.context.lineWidth));
+            //     50 * (1 / 2 * 10),
+            //     50 * (1 / 2 * 10));
+            // debugger
+            // }
         } catch {
             console.log("sugesstions are not completed.")
         }        
@@ -410,7 +554,7 @@ export default class SketchPad {
     }
 
     download(e) {
-        const canvaschik = this.canvas.toDataURL('image/png');
+        const canvaschik = this.canvas.toDataURL(); // default png
         const link = document.createElement('a');
         link.setAttribute('download', 'drawy.png');
         link.setAttribute('href', canvaschik);
