@@ -67117,15 +67117,41 @@ class SketchPad {
         document.getElementById("eraser-icon").addEventListener("click", this.handleEraserIconClick);
         document.getElementById("brush-icon").addEventListener("click", this.handleBrushIconClick);
 
-        document.getElementById("brush-icon").addEventListener("mouseover", () => { document.getElementById("brush-slider-div").setAttribute("style", "display: block") });
-        // document.getElementById("brush-slider-div").addEventListener("change", () => { document.getElementById("brush-slider-div").setAttribute("style", "display: hide") })
-        // document.getElementById("brush-icon").addEventListener("mouseout", () => { document.getElementById("brush-slider-div").setAttribute("style", "display: hide") });
-    }
+        // hide/show the slider
+        document.getElementById("tool-pencil-div").addEventListener("mouseover", () => { 
+            document.getElementById("brush-slider-div").setAttribute("style", "display: block");
+            document.getElementById("tool-pencil-div").setAttribute("style", "width: 200px");
+        });
 
-    // initCurrentBrush() {
-    //     this.currentBrush = "regular";
-    //     this.context.lineCap = "round";
-    // }
+        document.getElementById("tool-pencil-div").addEventListener("mouseout", () => { 
+            document.getElementById("brush-slider-div").setAttribute("style", "display: hide");
+            document.getElementById("tool-pencil-div").setAttribute("style", "width: 44px"); 
+        });
+
+        // hide/show the image uploads
+        document.getElementById("tool-upload-div").addEventListener("mouseover", () => {
+            document.getElementById("images").setAttribute("style", "display: block");
+            document.getElementById("tool-upload-div").setAttribute("style", "width: 200px");
+        });
+
+        document.getElementById("tool-upload-div").addEventListener("mouseout", () => {
+            document.getElementById("images").setAttribute("style", "display: hide");
+            document.getElementById("tool-upload-div").setAttribute("style", "width: 44px");
+        });
+
+        // hide/show color-strip
+        document.getElementById("tool-color-div").addEventListener("mouseover", () => {
+            document.getElementById("colors").setAttribute("style", "display: block");
+            document.getElementById("color-strip").setAttribute("style", "display: block");
+            document.getElementById("tool-color-div").setAttribute("style", "width: 200px");
+        });
+
+        document.getElementById("tool-color-div").addEventListener("mouseout", () => {
+            document.getElementById("colors").setAttribute("style", "display: none");
+            document.getElementById("color-strip").setAttribute("style", "display: none");
+            document.getElementById("tool-color-div").setAttribute("style", "width: 46px");
+        });
+    }
 
     handleEraserIconClick(e) {
         document.getElementById("eraser-icon").setAttribute("style", "background-color: black; box-shadow: none;");
@@ -67245,52 +67271,6 @@ class SketchPad {
         // displaySuggestions goes here
     }
 
-    // translateSVGToInlineSVG() {
-    //     document.querySelectorAll('.img-svg').forEach((el) => {
-    //         const imgID = el.getAttribute('id');
-    //         const imgClass = el.getAttribute('class');
-    //         const imgURL = el.getAttribute('src');
-
-    //         // debugger
-
-    //         request(imgURL, (error, response, body) => { 
-    //             response;
-    //             error;
-    //             body;
-    //             // debugger
-    //             const parser = new DOMParser();
-    //             const xmlDoc = parser.parseFromString(body, 'text/html');
-
-    //             const paths = xmlDoc.getElementsByTagName("path");
-    //             let svg = xmlDoc.querySelector('svg');
-    //             debugger
-
-    //             Array.from(paths).forEach(path => {
-    //                 const style = window.getComputedStyle(path);
-    //                 const fill = style.getPropertyValue("fill");
-    //                 path.setAttribute("style", "stroke: blue");
-    //                 console.log(fill);
-    //                 if (fill === "rgb(255, 255, 255)") {
-    //                     path.parentElement.removeChild(path);
-
-    //                 }
-    //             })
-
-    //             if (typeof imgID !== 'undefined') {
-    //                 svg.setAttribute('id', imgID);
-    //             }
-
-    //             if (typeof imgClass !== 'undefined') {
-    //                 svg.setAttribute('class', imgClass + ' replaced-svg');
-    //             }
-
-    //             svg.removeAttribute('xmlns:a');
-
-    //             el.parentNode.replaceChild(svg, el);
-    //         })
-    //     });
-    // }
-
     prepareStencil(imgURL) {
         // <object id="svg-object" data="path/to/external.svg" type="image/svg+xml"></object>
         
@@ -67340,10 +67320,10 @@ class SketchPad {
             // let w = 200;
             // let h = 200;
 
-            let image = new Image();
-            image.crossOrigin = "Anonymous";
-            image.src = e.target.src;
-            image.className = "img-svg";
+            // let image = new Image();
+            // image.crossOrigin = "Anonymous";
+            // image.src = e.target.src;
+            // image.className = "img-svg";
             // image.setAttribute('style', "width: 50px; height:50px;");
             
             // this.prepareStencil(image);
@@ -67353,38 +67333,70 @@ class SketchPad {
             ////////////
             // const imgID = image.getAttribute('id');
             // const imgClass = image.getAttribute('class');
-            const imgURL = image.getAttribute('src');
+            // const imgURL = image.getAttribute('src');
 
             // debugger
 
+            const imgURL = e.target.src;
             request(imgURL, (error, response, body) => {
                 response;
                 error;
                 body;
                 imgURL
                 // debugger
+                
                 const parser = new DOMParser();
                 const xmlDoc = parser.parseFromString(body, 'text/html');
-
-                const paths = xmlDoc.getElementsByTagName("path");
                 let svg = xmlDoc.querySelector('svg');
 
-                debugger
+                const paths = xmlDoc.getElementsByTagName("path");
+                const circles = xmlDoc.getElementsByTagName("circle");
+                const ellipses = xmlDoc.getElementsByTagName("ellipse");
+                const lines = xmlDoc.getElementsByTagName("line");
+                const polygons = xmlDoc.getElementsByTagName("polygon");
+                const polylines = xmlDoc.getElementsByTagName("polyline");
+                const rects = xmlDoc.getElementsByTagName("rect");
+
+                // debugger
+                Array.from(rects).forEach(rect => {
+                    rect.setAttribute("style", `stroke: ${this.tool.colorPicker.selectedColor}; fill: none;`);
+                })
+
+                Array.from(polylines).forEach(polyline => {
+                    polyline.setAttribute("style", `stroke: ${this.tool.colorPicker.selectedColor}; fill: none;`);
+                })
+
+                Array.from(polygons).forEach(polygon => {
+                    polygon.setAttribute("style", `stroke: ${this.tool.colorPicker.selectedColor}; fill: none;`);
+                })
+
+                Array.from(lines).forEach(line => {
+                    line.setAttribute("style", `stroke: ${this.tool.colorPicker.selectedColor}; fill: none;`);
+                })
+
+                Array.from(ellipses).forEach(ellipse => {
+                    ellipse.setAttribute("style", `stroke: ${this.tool.colorPicker.selectedColor}; fill: none;`);
+                })
+
+                Array.from(circles).forEach(circle => {
+                    circle.setAttribute("style", `stroke: ${this.tool.colorPicker.selectedColor}; fill: none;`);
+                })
 
                 Array.from(paths).forEach(path => {
-                    debugger
+                    
                     // const style = window.getComputedStyle(path);
                     // const fill = style.getPropertyValue("fill");
-                    const fill = svg.style.getPropertyValue("fill");
-                    debugger
-
-                    path.setAttribute("style", `stroke: ${this.tool.colorPicker.selectedColor}`);
-                    console.log(fill);
+                    // const fill = svg.style.getPropertyValue("fill");
                     // debugger
-                    if (fill === "#fff") {
-                        path.parentElement.removeChild(path);
-                        debugger
-                    }
+
+                    path.setAttribute("style", `stroke: ${this.tool.colorPicker.selectedColor}; fill: none;`);
+                    // path.setAttribute("style", "fill: none");
+                    // console.log(fill);
+                    // // debugger
+                    // if (fill === "rgb(255, 255, 255)") {
+                    //     path.parentElement.removeChild(path);
+                    //     // debugger
+                    // }
                 })
 
                 let newImg = new Image();
@@ -67397,13 +67409,13 @@ class SketchPad {
 
                 // prepend a "header"
                 var image64 = b64Start + svg64;
-                debugger
+                // debugger
 
-                // set it as the source of the img element
+                // set it as the source of the newImg element
                 newImg.src = image64;
 
                 newImg.onload = () => { 
-                    debugger
+                    // debugger
                     this.context.drawImage(
                     newImg, 10, 10
                     // e.offsetX - 25,
@@ -67652,7 +67664,7 @@ __webpack_require__.r(__webpack_exports__);
 
 document.addEventListener("DOMContentLoaded", () => {
     const canvas = document.getElementById("canvas");
-    canvas.setAttribute('width', 700);
+    canvas.setAttribute('width', 750);
     canvas.setAttribute('height', 600);
     // tools goes here, and then will pass it as a second arg to the cnavas
     const colorPicker = new _components_colorPicker__WEBPACK_IMPORTED_MODULE_1__["default"]();

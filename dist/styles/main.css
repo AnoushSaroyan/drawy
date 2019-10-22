@@ -51,9 +51,10 @@ html {
     margin-top: 30px;
     margin-bottom: 30px;
     margin-left: 0.9rem;
-    display: flex;
-    flex-direction: row;
-    width: 400px;
+    /* display: flex;
+    flex-direction: row; */
+    /* width: 400px; */
+    display: -webkit-box;
 }
 
 #toolbar {
@@ -79,6 +80,10 @@ html {
     border-radius: 50%;
 }
 
+.current-color:hover {
+    cursor: pointer;
+}
+
 /* .tool-icon:active {
     background-color: #000;
 } */
@@ -97,11 +102,13 @@ html {
 
 .color-picker {
     height: 40px;
-    width: 258px;
+    /* width: 258px; */
+    width: 181px;
     border: 2px solid #ffff;
     border-radius: 20px;
     margin-left: 15px;
     z-index: 1;
+    display: none;
 }
 
 /* #brush-size {
@@ -114,6 +121,7 @@ html {
 
 #color-strip {
     border-radius: 20px;
+    display: none;
 }
 
 #draw-suggestions {
@@ -147,6 +155,7 @@ html {
 .suggestions-div-wrapper p {
     font-family: "Indie Flower", cursive;
     margin-bottom: 3px;
+    font-size: 18px;
 }
 
 .suggestions-div-wrapper {
@@ -154,9 +163,9 @@ html {
 }
 
 .brush-slider {
-    margin-top: 8px;
+    margin-top: 5px;
     position: relative;
-    margin-left: 15px;
+    margin-left: 5px;
     display: none;
 }
 
@@ -167,7 +176,10 @@ html {
     border-radius: 0;
     background-color: #ededee; */
 
-    width: 109%;
+    /* width: 109%; */
+    /* width: 205px; */
+    width: 150px;
+    height: 55px;
     /* left: -4%; */
     position: absolute;
     pointer-events: none;
@@ -177,7 +189,7 @@ html {
     box-shadow: none;
     border-radius: 0;
     background-color: #ededee;
-    margin-top: 4px;
+    /* margin-top: 4px; */
 }
 
 #brush-size {
@@ -187,6 +199,8 @@ html {
     outline: none;
     margin: 9px 0;
     background-color: transparent;
+    /* width: 188px; */
+    width: 138px;
 }
 
 #canvas {
@@ -229,10 +243,12 @@ input[type=range]:focus::-webkit-slider-runnable-track {
     background-color: rgba(110, 107, 107, 0.37);
     /* box-shadow: 0.1rem 0.1rem 0 rgba(36, 35, 35, 0.37); */
     padding: 2px;
-    width: 262px;
+    /* width: 262px; */
+    width: 185px;
     z-index: 2;
     overflow: auto;
     white-space: nowrap;
+    display: none;
 
     /* overflow-x: scroll;
     overflow-y: hidden;
@@ -284,4 +300,10 @@ input[type=range]:focus::-webkit-slider-runnable-track {
 
 #download-btn:hover {
     box-shadow:inset 0 0 0 99999px rgba(124, 22, 102, 0.267);
+}
+
+.toolbar-wrapper {
+    width: 200px;
+    height: 614px;
+    /* padding-right: 10px; */
 }
