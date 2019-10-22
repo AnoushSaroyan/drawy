@@ -44,12 +44,12 @@ input[type="file"] {
 input[type=range]::-webkit-slider-thumb {
   -webkit-appearance: none;
   border: 1px solid #000000;
-  height: 25px;
+  height: 35px;
   width: 13px;
   border-radius: 3px;
   background: #ffffff;
   cursor: pointer;
-  margin-top: -6px; 
+  margin-top: -10px; 
   box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d; 
 }
 
