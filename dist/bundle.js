@@ -67031,8 +67031,8 @@ class SketchPad {
         this.context = canvas.getContext("2d");
 
         // set the background to white
-        this.context.fillStyle = "white";
-        this.context.fillRect(0, 0, canvas.width, canvas.height);
+        // this.context.fillStyle = "white";
+        // this.context.fillRect(0, 0, canvas.width, canvas.height);
 
         // clear canvas
         this.clearCanvasBtn = document.getElementById('clear-canvas-btn');
@@ -67072,8 +67072,10 @@ class SketchPad {
         // this.initCurrentBrush();
 
         this.dragging = false; // indicates if the mouse is held down
+        this.predict = false;
         this.loadStencils();
         this.prepareNewShape(); 
+        this.saveState(); // cuz the first time it won't have a second to last to undo
 
         // binds
         this.putPoint = this.putPoint.bind(this);
@@ -67095,8 +67097,8 @@ class SketchPad {
         this.determineCurrentBrush = this.determineCurrentBrush.bind(this);
         this.handleEraserIconClick = this.handleEraserIconClick.bind(this);
         this.download = this.download.bind(this);
-        this.prepareStencil = this.prepareStencil.bind(this);
-        // this.translateSVGToInlineSVG = this.translateSVGToInlineSVG.bind(this);
+        // this.prepareStencil = this.prepareStencil.bind(this);
+        // this.drawUndoListExceptLast = this.drawUndoListExceptLast.bind(this);
 
         // draw events
         this.canvas.addEventListener("mousedown", this.engage);
@@ -67110,14 +67112,14 @@ class SketchPad {
         this.colorFillBtn.addEventListener("click", this.colorFill);
         this.undoBtn.addEventListener("click", this.undo);
         this.redoBtn.addEventListener("click", this.redo);
-        this.drawSuggestions.addEventListener("click", this.pickSuggestion);
+        this.drawSuggestions.addEventListener("click", (e) => { this.pickSuggestion(e); this.saveState(); });
         this.downloadBtn.addEventListener("click", this.download);
 
 
         document.getElementById("eraser-icon").addEventListener("click", this.handleEraserIconClick);
         document.getElementById("brush-icon").addEventListener("click", this.handleBrushIconClick);
 
-        // hide/show the slider
+        // hide/show the brush slider
         document.getElementById("tool-pencil-div").addEventListener("mouseover", () => { 
             document.getElementById("brush-slider-div").setAttribute("style", "display: block");
             document.getElementById("tool-pencil-div").setAttribute("style", "width: 200px");
@@ -67203,6 +67205,8 @@ class SketchPad {
 
     displaySuggestions(iconList) {
         this.drawSuggestions.innerHTML = '';
+        document.getElementById("draw-suggestions").innerHTML = "";
+
 
         iconList.forEach(icon => {
             // debugger
@@ -67223,33 +67227,39 @@ class SketchPad {
     }
 
     loadSuggestionsFromAPI(shapes) {
-        let url = API_ENDPOINT;
-        let requestBody = {
-            input_type: 0,
-            requests: [{
-                ink: shapes,
-                language: 'autodraw',
-                writing_guide: {
-                    height: this.canvas.height,
-                    width: this.canvas.width
-                }
-            }]
-        };
+        if(this.predict) { 
+            let url = API_ENDPOINT;
+            let requestBody = {
+                input_type: 0,
+                requests: [{
+                    ink: shapes,
+                    language: 'autodraw',
+                    writing_guide: {
+                        height: this.canvas.height,
+                        width: this.canvas.width
+                    }
+                }]
+            };
 
-        let headers = new Headers({
-            'Content-Type': 'application/json; charset=utf-8'
-        });
-        fetch(url, {
-            method: 'POST',
-            headers,
-            body: JSON.stringify(requestBody),
-        }).then((response) => {
-            // debugger
-            return response.json();
-        }).then((jsonResponse) => {
-            // debugger
-            this.displaySuggestions(jsonResponse[1][0][1]);
-        });
+            let headers = new Headers({
+                'Content-Type': 'application/json; charset=utf-8'
+            });
+            fetch(url, {
+                method: 'POST',
+                headers,
+                body: JSON.stringify(requestBody),
+            }).then((response) => {
+                // debugger
+                return response.json();
+            }).then((jsonResponse) => {
+                // debugger
+                this.displaySuggestions(jsonResponse[1][0][1]);
+            });
+
+            this.predict = false;
+        }
+
+        this.shapes = [];
     }
 
     /////
@@ -67271,41 +67281,63 @@ class SketchPad {
         // displaySuggestions goes here
     }
 
-    prepareStencil(imgURL) {
-        // <object id="svg-object" data="path/to/external.svg" type="image/svg+xml"></object>
+    // prepareStencil(imgURL) {
+    //     // <object id="svg-object" data="path/to/external.svg" type="image/svg+xml"></object>
         
-        // let obj = document.createElement('object');
-        // obj.id = "svg-obj";
-        // obj.data = image.src;
-        // obj.type = "image/svg+xml";
+    //     // let obj = document.createElement('object');
+    //     // obj.id = "svg-obj";
+    //     // obj.data = image.src;
+    //     // obj.type = "image/svg+xml";
 
-        request(imgURL, (error, response, body) => {
-            response;
-            error;
-            body;
-            debugger
-            const parser = new DOMParser();
-            const xmlDoc = parser.parseFromString(body, 'text/html');
+    //     request(imgURL, (error, response, body) => {
+    //         response;
+    //         error;
+    //         body;
+    //         debugger
+    //         const parser = new DOMParser();
+    //         const xmlDoc = parser.parseFromString(body, 'text/html');
 
-            const paths = xmlDoc.getElementsByTagName("path");
-            // let svg = xmlDoc.querySelector('svg');
-            debugger
+    //         const paths = xmlDoc.getElementsByTagName("path");
+    //         // let svg = xmlDoc.querySelector('svg');
+    //         debugger
 
-            Array.from(paths).forEach(path => {
-                debugger
-                const style = window.getComputedStyle(path);
-                const fill = style.getPropertyValue("fill");
+    //         Array.from(paths).forEach(path => {
+    //             debugger
+    //             const style = window.getComputedStyle(path);
+    //             const fill = style.getPropertyValue("fill");
 
-                path.setAttribute("style", "stroke: blue");
-                console.log(fill);
-                debugger
-                if (fill === "rgb(255, 255, 255)") {
-                    path.parentElement.removeChild(path);
-                    debugger
-                }
-            })
-        });
-    }
+    //             path.setAttribute("style", "stroke: blue");
+    //             console.log(fill);
+    //             debugger
+    //             if (fill === "rgb(255, 255, 255)") {
+    //                 path.parentElement.removeChild(path);
+    //                 debugger
+    //             }
+    //         })
+    //     });
+    // }
+
+    // drawUndoListExceptLast() {
+    //     let undoListCopy = this.undoList.slice();
+    //     undoListCopy.pop();
+
+    //     undoListCopy.forEach(drawing => {
+    //         let img = document.createElement('img');
+    //         img.src = drawing;
+    //         img.crossOrigin = "Anonymous"
+
+    //         img.onload = () => {
+    //             // this.clear();
+    //             this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    //             this.context.drawImage(img, 0, 0, this.canvas.width, this.canvas.height, 0, 0, this.canvas.width, this.canvas.height);
+    //         }
+    //     })
+
+    // }
+
+    // drawSecondToLast() {
+
+    // }
 
     pickSuggestion(e) {
         try { 
@@ -67337,7 +67369,24 @@ class SketchPad {
 
             // debugger
 
+            // this.saveState();
+
             const imgURL = e.target.src;
+            // this.undo();
+            // draw second to last element of the undo_list
+            let secondToLastDrawingSRC = this.undoList[this.undoList.length - 1];
+            let secondToLastDrawing = document.createElement('img');
+            secondToLastDrawing.src = secondToLastDrawingSRC;
+            secondToLastDrawing.crossOrigin = "Anonymous"
+
+            secondToLastDrawing.onload = () => {
+                debugger
+                // this.clear();
+                this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+                this.context.drawImage(secondToLastDrawing, 0, 0, this.canvas.width, this.canvas.height, 0, 0, this.canvas.width, this.canvas.height);
+                // this.saveState(this.undoList, true);
+                // this.download();
+            }
             request(imgURL, (error, response, body) => {
                 response;
                 error;
@@ -67345,6 +67394,7 @@ class SketchPad {
                 imgURL
                 // debugger
                 
+                // gets rid of all the white fills and fills with the current color
                 const parser = new DOMParser();
                 const xmlDoc = parser.parseFromString(body, 'text/html');
                 let svg = xmlDoc.querySelector('svg');
@@ -67399,6 +67449,25 @@ class SketchPad {
                     // }
                 })
 
+                // this.clear();
+                // this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+                // this.context.fillStyle = "white";
+                // this.context.fillRect(0, 0, canvas.width, canvas.height);
+                // this.drawUndoListExceptLast();
+
+                // draw second to last element of the undo_list
+                // let secondToLastDrawingSRC = this.undoList[this.undoList.length - 2];
+                // let secondToLastDrawing = document.createElement('img');
+                // secondToLastDrawing.src = secondToLastDrawingSRC;
+                // secondToLastDrawing.crossOrigin = "Anonymous"
+
+                // secondToLastDrawing.onload = () => {
+                //     // this.clear();
+                //     this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+                //     this.context.drawImage(secondToLastDrawing, 0, 0, this.canvas.width, this.canvas.height, 0, 0, this.canvas.width, this.canvas.height);
+                // }
+
+
                 let newImg = new Image();
                 // get svg data
                 let xml = new XMLSerializer().serializeToString(svg);
@@ -67415,7 +67484,8 @@ class SketchPad {
                 newImg.src = image64;
 
                 newImg.onload = () => { 
-                    // debugger
+                    debugger
+                    // this.saveState(); 
                     this.context.drawImage(
                     newImg, 10, 10
                     // e.offsetX - 25,
@@ -67424,9 +67494,14 @@ class SketchPad {
                     // // 50 * (1 / 2 * this.context.lineWidth));
                     // 50 * (1 / 2 * 10),
                     // 50 * (1 / 2 * 10)
-                    )};
+                    );
 
-                this.saveState();   
+                    debugger
+                    // this.saveState(); 
+                    // this.download();
+                };
+
+                // this.saveState();   
 
                 // image.parentNode.replaceChild(svg, image);
             });
@@ -67547,6 +67622,7 @@ class SketchPad {
     engage(e) {
         this.saveState();
         this.dragging = true;
+        this.predict = true;
         this.prepareNewShape();
         this.pressedAt = Date.now();
         this.putPoint(e);  
@@ -67577,7 +67653,9 @@ class SketchPad {
         this.context.fillRect(0, 0, canvas.width, canvas.height);
 
         this.shapes = [];
-        this.drawSuggestions.innerHTML = '';
+        this.undoList = [];
+        this.redoList = [];
+        // this.drawSuggestions.innerHTML = '';
 
         document.getElementById("draw-suggestions").innerHTML = "";
         // this.suggestionsCompleted = true;
@@ -67631,41 +67709,41 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-// import stencils from "./components/stencils";
-// debugger
-// window.stencils = stencils;
-
-// var globalScript = {
-
-//     init: function () {
-//         /* svg to inline */
-//         (function () {
-//             $(function () {
-//                 var t;
-//                 return (t = $('img[src$="svg"]').hide(), t.each(function (t, e) {
-//                     var r = this;
-//                     return $.get(this.src).success(function (t) {
-//                         var e, n, s, i, c, a, u;
-//                         for (e = $(t).find("svg"), c = r.attributes, $.extend(c, e[0].attributes), a = 0, u = c.length; u > a; a += 1) {
-//                             n = c[a], s = n.nodeName, i = n.nodeValue, "src" !== s && "style" !== s && e.attr(s, i);
-//                         }
-//                         return $(r).replaceWith(e);
-//                     });
-//                 }));
-//             });
-//         }).call(this);
-
-//     }
-// }
-
-// $(document).ready(function () {
-//     globalScript.init();
-// });
 
 document.addEventListener("DOMContentLoaded", () => {
     const canvas = document.getElementById("canvas");
+    const context = canvas.getContext("2d");
     canvas.setAttribute('width', 750);
     canvas.setAttribute('height', 600);
+    context.fillStyle = "white";
+    context.fillRect(0, 0, canvas.width, canvas.height);
+    // Get a reference to the image element
+    // let elephant = document.getElementById("elephant");
+
+    // // Take action when the image has loaded
+    // elephant.addEventListener("load", function () {
+    //     // let imgCanvas = document.getElementById("canvas");
+    //     // let imgContext = imgCanvas.getContext("2d");
+
+    //     // // Make sure canvas is as big as the picture
+    //     // canvas.width = elephant.width;
+    //     // canvas.height = elephant.height;
+
+    //     // Draw image into canvas element
+    //     context.drawImage(elephant, 0, 0, elephant.width, elephant.height);
+
+    //     // Get canvas contents as a data URL
+    //     let imgAsDataURL = canvas.toDataURL("image/png");
+
+    //     // Save image into localStorage
+    //     try {
+    //         localStorage.setItem("elephant", imgAsDataURL);
+    //     }
+    //     catch (e) {
+    //         console.log("Storage failed: " + e);
+    //     }
+    // }, false); 
+
     // tools goes here, and then will pass it as a second arg to the cnavas
     const colorPicker = new _components_colorPicker__WEBPACK_IMPORTED_MODULE_1__["default"]();
     const imageUpload = new _components_imageUpload__WEBPACK_IMPORTED_MODULE_2__["default"]();
