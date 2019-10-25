@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const canvas = document.getElementById("canvas");
     const context = canvas.getContext("2d");
     canvas.setAttribute('width', 750);
-    canvas.setAttribute('height', 600);
+    canvas.setAttribute('height', 650);
     context.fillStyle = "white";
     context.fillRect(0, 0, canvas.width, canvas.height);
     // Get a reference to the image element
