@@ -59,6 +59,10 @@ export default class SketchPad {
         this.prepareNewShape(); 
         this.saveState(); // cuz the first time it won't have a second to last to undo
 
+
+        this.offsetX = document.body.offsetLeft;
+        this.offsetY = document.body.offsetTop;
+
         // binds
         this.putPoint = this.putPoint.bind(this);
         this.engage = this.engage.bind(this);
@@ -328,11 +332,11 @@ export default class SketchPad {
             // let xMax = this.canvas.width;
             // let yMax = this.canvas.height;
 
-            // let xAv = (Math.max.apply(null, this.shapes[0]) + Math.min.apply(null, this.shapes[0])) / 2;
-            // let yAv = (Math.max.apply(null, this.shapes[1]) + Math.min.apply(null, this.shapes[1])) / 2;
+            let xAvg = (Math.max.apply(null, this.shapes[0]) + Math.min.apply(null, this.shapes[0])) / 2;
+            let yAvg = (Math.max.apply(null, this.shapes[1]) + Math.min.apply(null, this.shapes[1])) / 2;
 
-            // let w = 200;
-            // let h = 200;
+            let width = 200;
+            let height = 200;
 
             // let image = new Image();
             // image.crossOrigin = "Anonymous";
@@ -362,7 +366,7 @@ export default class SketchPad {
             secondToLastDrawing.crossOrigin = "Anonymous"
 
             secondToLastDrawing.onload = () => {
-                debugger
+                // debugger
                 // this.clear();
                 this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
                 this.context.drawImage(secondToLastDrawing, 0, 0, this.canvas.width, this.canvas.height, 0, 0, this.canvas.width, this.canvas.height);
@@ -450,6 +454,7 @@ export default class SketchPad {
                 // }
 
 
+                const brushWidth = document.getElementById("brush-size");
                 let newImg = new Image();
                 // get svg data
                 let xml = new XMLSerializer().serializeToString(svg);
@@ -466,22 +471,27 @@ export default class SketchPad {
                 newImg.src = image64;
 
                 newImg.onload = () => { 
-                    debugger
+                    // debugger
                     // this.saveState(); 
                     this.context.drawImage(
-                    newImg, 10, 10
-                    // e.offsetX - 25,
-                    // e.offsetY - 25,
-                    // // 50 * (1 / 2 * this.context.lineWidth),
-                    // // 50 * (1 / 2 * this.context.lineWidth));
+                    newImg, //e.clientX, e.clientY, 50, 50
+                    e.offsetX - 25,
+                    e.offsetY - 25,
+                    25 * brushWidth.value,
+                    25 * brushWidth.value
                     // 50 * (1 / 2 * 10),
                     // 50 * (1 / 2 * 10)
                     );
 
-                    debugger
+                    // debugger
                     // this.saveState(); 
                     // this.download();
                 };
+
+                // newImg.onload = () => {
+                //     this.context.drawImage(newImg, (xAvg - weight / 2), (yAvg - height / 2), 200, 200)
+                // }
+
 
                 // this.saveState();   
 
@@ -565,10 +575,10 @@ export default class SketchPad {
             } else if (this.currentBrush === "image"){ // current brush is "image"
                 this.context.drawImage(
                     this.tool.imageUpload.currentImg,
-                    e.offsetX - 25,
-                    e.offsetY - 25,
-                    50 * (1 / 2 * brushWidth.value),
-                    50 * (1 / 2 * brushWidth.value)
+                    e.offsetX - 20,
+                    e.offsetY - 20,
+                    5 * brushWidth.value,
+                    5 * brushWidth.value
                 );
             } else if (this.currentBrush === "eraser") {
                 // debugger
@@ -597,6 +607,7 @@ export default class SketchPad {
             // }
 
             // save the coords to the current shape
+            // this.storeCoordinates(e.clientX - this.offsetX, e.clientY - this.offsetY, Date.now() - this.pressedAt);
             this.storeCoordinates(e.offsetX, e.offsetY, Date.now() - this.pressedAt);
         }
     }
