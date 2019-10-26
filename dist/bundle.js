@@ -67072,8 +67072,10 @@ class SketchPad {
         // this.initCurrentBrush();
 
         this.dragging = false; // indicates if the mouse is held down
-        this.predict = false;
-        this.loadStencils();
+        this.predict = false; // if suggestions were already loaded for a certan drawing, it won't be generated again, will use the previously loaded one
+        this.suggetionPicked = false;
+        this.captureWithoutPickedSgsSRC; // capture the canvas before chaging the drawing with a picked suggestion
+        // this.loadStencils();
         this.prepareNewShape(); 
         this.saveState(); // cuz the first time it won't have a second to last to undo
 
@@ -67204,10 +67206,10 @@ class SketchPad {
         }
     }
 
-    loadStencils() {
-        // debugger
-        // this.Http.get(STENCILS_ENDPOINT).subscribe(response => this.stencils = response.json());
-    }
+    // loadStencils() {
+    //     // debugger
+    //     // this.Http.get(STENCILS_ENDPOINT).subscribe(response => this.stencils = response.json());
+    // }
 
     displaySuggestions(iconList) {
         this.drawSuggestions.innerHTML = '';
@@ -67263,6 +67265,7 @@ class SketchPad {
             });
 
             this.predict = false;
+            this.suggetionPicked = false;
         }
 
         this.shapes = [];
@@ -67352,7 +67355,7 @@ class SketchPad {
             // let xMax = this.canvas.width;
             // let yMax = this.canvas.height;
 
-            debugger
+            // debugger
 
         let xAvg = (Math.max.apply(null, this.currentShape[0]) + Math.min.apply(null, this.currentShape[0])) / 2;
         let yAvg = (Math.max.apply(null, this.currentShape[1]) + Math.min.apply(null, this.currentShape[1])) / 2;
@@ -67360,7 +67363,7 @@ class SketchPad {
             let width = 200;
             let height = 200;
 
-            debugger
+            // debugger
             // let image = new Image();
             // image.crossOrigin = "Anonymous";
             // image.src = e.target.src;
@@ -67383,18 +67386,34 @@ class SketchPad {
             const imgURL = e.target.src;
             // this.undo();
             // draw second to last element of the undo_list
-            let secondToLastDrawingSRC = this.undoList[this.undoList.length - 1];
-            let secondToLastDrawing = document.createElement('img');
-            secondToLastDrawing.src = secondToLastDrawingSRC;
-            secondToLastDrawing.crossOrigin = "Anonymous"
+            if (this.suggetionPicked) {
+                let captureWithoutPickedSgs = document.createElement('img');
+                captureWithoutPickedSgs.src = this.captureWithoutPickedSgsSRC;
+                captureWithoutPickedSgs.crossOrigin = "Anonymous";
 
-            secondToLastDrawing.onload = () => {
-                // debugger
-                // this.clear();
-                this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
-                this.context.drawImage(secondToLastDrawing, 0, 0, this.canvas.width, this.canvas.height, 0, 0, this.canvas.width, this.canvas.height);
-                // this.saveState(this.undoList, true);
-                // this.download();
+                captureWithoutPickedSgs.onload = () => {
+                    // debugger
+                    // this.clear();
+                    this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+                    this.context.drawImage(captureWithoutPickedSgs, 0, 0, this.canvas.width, this.canvas.height, 0, 0, this.canvas.width, this.canvas.height);
+                    // this.saveState(this.undoList, true);
+                    // this.download();
+                }
+            } else {
+                let lastDrawingSRC = this.undoList[this.undoList.length - 1];
+                let lastDrawing = document.createElement('img');
+                lastDrawing.src = lastDrawingSRC;
+                this.captureWithoutPickedSgsSRC = lastDrawingSRC
+                lastDrawing.crossOrigin = "Anonymous";
+
+                lastDrawing.onload = () => {
+                    // debugger
+                    // this.clear();
+                    this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+                    this.context.drawImage(lastDrawing, 0, 0, this.canvas.width, this.canvas.height, 0, 0, this.canvas.width, this.canvas.height);
+                    // this.saveState(this.undoList, true);
+                    // this.download();
+                }
             }
             request(imgURL, (error, response, body) => {
                 response;
@@ -67510,7 +67529,7 @@ class SketchPad {
                     this.context.drawImage(newImg, (xAvg - width / 2), (yAvg - height / 2), width, height);
 
                     this.shapes = [];
-                    debugger
+                    this.suggetionPicked = true;
                     // this.saveState(); 
                     // this.download();
                 };
