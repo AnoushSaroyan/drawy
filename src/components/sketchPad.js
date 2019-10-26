@@ -60,8 +60,10 @@ export default class SketchPad {
         this.saveState(); // cuz the first time it won't have a second to last to undo
 
 
-        this.offsetX = document.body.offsetLeft;
-        this.offsetY = document.body.offsetTop;
+        // this.offsetX = document.body.offsetLeft;
+        // this.offsetY = document.body.offsetTop;
+        this.offsetX = this.canvas.offsetLeft;
+        this.offsetY = this.canvas.offsetTop;
 
         // binds
         this.putPoint = this.putPoint.bind(this);
@@ -326,18 +328,21 @@ export default class SketchPad {
     // }
 
     pickSuggestion(e) {
-        try { 
+        // try { 
             // debugger
             // this.clear();
             // let xMax = this.canvas.width;
             // let yMax = this.canvas.height;
 
-            let xAvg = (Math.max.apply(null, this.shapes[0]) + Math.min.apply(null, this.shapes[0])) / 2;
-            let yAvg = (Math.max.apply(null, this.shapes[1]) + Math.min.apply(null, this.shapes[1])) / 2;
+            debugger
+
+        let xAvg = (Math.max.apply(null, this.currentShape[0]) + Math.min.apply(null, this.currentShape[0])) / 2;
+        let yAvg = (Math.max.apply(null, this.currentShape[1]) + Math.min.apply(null, this.currentShape[1])) / 2;
 
             let width = 200;
             let height = 200;
 
+            debugger
             // let image = new Image();
             // image.crossOrigin = "Anonymous";
             // image.src = e.target.src;
@@ -473,17 +478,21 @@ export default class SketchPad {
                 newImg.onload = () => { 
                     // debugger
                     // this.saveState(); 
-                    this.context.drawImage(
-                    newImg, //e.clientX, e.clientY, 50, 50
-                    e.offsetX - 25,
-                    e.offsetY - 25,
-                    25 * brushWidth.value,
-                    25 * brushWidth.value
-                    // 50 * (1 / 2 * 10),
-                    // 50 * (1 / 2 * 10)
-                    );
 
-                    // debugger
+                    // this.context.drawImage(newImg, 10, 10);
+
+                    // this.context.drawImage(
+                    //     newImg,
+                    //     e.offsetX - 25,
+                    //     e.offsetY - 25,
+                    //     50 * (1/2 * brushWidth.value),
+                    //     50 * (1/2 * brushWidth.value)
+                    // );
+
+                    this.context.drawImage(newImg, (xAvg - width / 2), (yAvg - height / 2), width, height);
+
+                    this.shapes = [];
+                    debugger
                     // this.saveState(); 
                     // this.download();
                 };
@@ -513,9 +522,9 @@ export default class SketchPad {
             //     50 * (1 / 2 * 10));
             // debugger
             // }
-        } catch {
-            console.log("sugesstions are not completed.")
-        }        
+        // } catch {
+        //     console.log("sugesstions are not completed.")
+        // }        
     }
     ///////
 
@@ -575,8 +584,8 @@ export default class SketchPad {
             } else if (this.currentBrush === "image"){ // current brush is "image"
                 this.context.drawImage(
                     this.tool.imageUpload.currentImg,
-                    e.offsetX - 20,
-                    e.offsetY - 20,
+                    e.offsetX - 15,
+                    e.offsetY - 15,
                     5 * brushWidth.value,
                     5 * brushWidth.value
                 );
@@ -608,7 +617,9 @@ export default class SketchPad {
 
             // save the coords to the current shape
             // this.storeCoordinates(e.clientX - this.offsetX, e.clientY - this.offsetY, Date.now() - this.pressedAt);
-            this.storeCoordinates(e.offsetX, e.offsetY, Date.now() - this.pressedAt);
+            let mouseX = parseInt(e.clientX - this.offsetX);
+            let mouseY = parseInt(e.clientY - this.offsetY);
+            this.storeCoordinates(mouseX, mouseY, Date.now() - this.pressedAt);
         }
     }
 
