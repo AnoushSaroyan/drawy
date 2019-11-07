@@ -583,9 +583,6 @@ export default class SketchPad {
 
     putPoint(e) {
         const brushWidth = document.getElementById("brush-size");
-        // current collor goes here
-        // const uploadIcon = document.getElementById("upload-icon");
-        // const brushIcon = document.getElementById("brush-icon");
 
         this.determineCurrentBrush();
 
@@ -600,7 +597,7 @@ export default class SketchPad {
                 this.context.stroke(); // nothing will show untill we do stroke() or fill()
                 this.context.beginPath(); 
                 this.context.moveTo(e.offsetX, e.offsetY); // sets an active point
-            } else if (this.currentBrush === "image"){ // current brush is "image"
+            } else if (this.currentBrush === "image"){ 
                 this.context.drawImage(
                     this.tool.imageUpload.currentImg,
                     e.offsetX - 15,
@@ -609,7 +606,6 @@ export default class SketchPad {
                     5 * brushWidth.value
                 );
             } else if (this.currentBrush === "eraser") {
-                // debugger
                 this.context.strokeStyle = "white";
                 this.context.lineCap = "round";
                 this.context.lineTo(e.offsetX, e.offsetY);
@@ -618,24 +614,6 @@ export default class SketchPad {
                 this.context.moveTo(e.offsetX, e.offsetY); // sets an active point
             }
 
-            // if (this.tool.imageUpload.currentImg) {
-            //     debugger
-            //     this.context.drawImage(
-            //         this.tool.imageUpload.currentImg,
-            //         e.offsetX - 25,
-            //         e.offsetY - 25,
-            //         50 * (1 / 2 * brushWidth.value),
-            //         50 * (1 / 2 * brushWidth.value)
-            //     );
-            // } else {
-            //     this.context.lineTo(e.offsetX, e.offsetY);
-            //     this.context.stroke(); // nothing will show untill we do stroke() or fill()
-            //     this.context.beginPath(); 
-            //     this.context.moveTo(e.offsetX, e.offsetY); // sets an active point
-            // }
-
-            // save the coords to the current shape
-            // this.storeCoordinates(e.clientX - this.offsetX, e.clientY - this.offsetY, Date.now() - this.pressedAt);
             let mouseX = parseInt(e.clientX - this.offsetX);
             let mouseY = parseInt(e.clientY - this.offsetY);
             this.storeCoordinates(mouseX, mouseY, Date.now() - this.pressedAt);
