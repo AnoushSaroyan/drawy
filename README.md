@@ -1,5 +1,5 @@
 # Drawy
-![](app/assets/images/overview-drawy.gif)
+![](drawy/images/overview-drawy.gif)
 
 [Live](https://drawy.netlify.com)
 
