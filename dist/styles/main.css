@@ -146,7 +146,7 @@ html {
 }
 
 .img-selected {
-    box-shadow: 0px 0px 10px 2px black;
+    border: 2px solid;
 }
 
 .tool-hover:hover {
@@ -199,6 +199,15 @@ html {
 #brush-size {
     /* width: 100%;
     height: 1.5rem; */
+    -webkit-appearance: none;
+    outline: none;
+    margin: 9px 0;
+    background-color: transparent;
+    /* width: 188px; */
+    width: 138px;
+}
+
+#eraser-size {
     -webkit-appearance: none;
     outline: none;
     margin: 9px 0;
@@ -392,5 +401,36 @@ input[type=range]:focus::-webkit-slider-runnable-track {
     cursor: pointer;
 }
 
+.display-flex {
+    display: -webkit-box;
+    margin-left: 14px;
+}
+
+.hover-div {
+    margin-left: 15px;
+    margin-top: 5px;
+    border: 1px solid #c5c2c2;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    height: 10px;
+    justify-content: center;
+    padding: 10px 15px;
+    padding-bottom: 15px;
+    /* padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 15px;
+    padding-right: 15px; */
+    background-color: #ffffff;
+    display: none;
+}
+
+#hover-download {
+    margin-top: 34px;
+}
+
+.tool-action {
+    z-index: 10;
+}
 
 

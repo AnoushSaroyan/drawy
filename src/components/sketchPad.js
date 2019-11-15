@@ -120,6 +120,17 @@ export default class SketchPad {
             document.getElementById("tool-pencil-div").setAttribute("style", "width: 44px"); 
         });
 
+        // eraser slider
+        document.getElementById("tool-eraser-div").addEventListener("mouseover", () => {
+            document.getElementById("eraser-slider-div").setAttribute("style", "display: block");
+            document.getElementById("tool-eraser-div").setAttribute("style", "width: 200px");
+        });
+
+        document.getElementById("tool-eraser-div").addEventListener("mouseout", () => {
+            document.getElementById("eraser-slider-div").setAttribute("style", "display: hide");
+            document.getElementById("tool-eraser-div").setAttribute("style", "width: 44px");
+        });
+
         // hide/show the image uploads
         document.getElementById("tool-upload-div").addEventListener("mouseover", () => {
             document.getElementById("images").setAttribute("style", "display: block");
@@ -142,6 +153,51 @@ export default class SketchPad {
             document.getElementById("colors").setAttribute("style", "display: none");
             document.getElementById("color-strip").setAttribute("style", "display: none");
             document.getElementById("tool-color-div").setAttribute("style", "width: 46px");
+        });
+
+        // div hovers 
+        document.getElementById("color-fill-icon").addEventListener("mouseover", () => {
+            document.getElementById("hover-fill").setAttribute("style", "display: block");
+        });
+
+        document.getElementById("color-fill-icon").addEventListener("mouseout", () => {
+            document.getElementById("hover-fill").setAttribute("style", "display: none");
+        });
+
+        //
+        document.getElementById("undo-btn").addEventListener("mouseover", () => {
+            document.getElementById("hover-undo").setAttribute("style", "display: block");
+        });
+
+        document.getElementById("undo-btn").addEventListener("mouseout", () => {
+            document.getElementById("hover-undo").setAttribute("style", "display: none");
+        });
+
+        //
+        document.getElementById("redo-btn").addEventListener("mouseover", () => {
+            document.getElementById("hover-redo").setAttribute("style", "display: block");
+        });
+
+        document.getElementById("redo-btn").addEventListener("mouseout", () => {
+            document.getElementById("hover-redo").setAttribute("style", "display: none");
+        });
+
+        //
+        document.getElementById("clear-icon").addEventListener("mouseover", () => {
+            document.getElementById("hover-delete").setAttribute("style", "display: block");
+        });
+
+        document.getElementById("clear-icon").addEventListener("mouseout", () => {
+            document.getElementById("hover-delete").setAttribute("style", "display: none");
+        });
+
+        //
+        document.getElementById("download-btn").addEventListener("mouseover", () => {
+            document.getElementById("hover-download").setAttribute("style", "display: block");
+        });
+
+        document.getElementById("download-btn").addEventListener("mouseout", () => {
+            document.getElementById("hover-download").setAttribute("style", "display: none");
         });
     }
 
@@ -583,6 +639,7 @@ export default class SketchPad {
 
     putPoint(e) {
         const brushWidth = document.getElementById("brush-size");
+        const eraserSize = document.getElementById("eraser-size");
 
         this.determineCurrentBrush();
 
@@ -609,6 +666,7 @@ export default class SketchPad {
                 );
             } else if (this.currentBrush === "eraser") {
                 this.context.strokeStyle = "white";
+                this.context.lineWidth = eraserSize.value;
                 this.context.lineCap = "round";
                 this.context.lineTo(e.offsetX, e.offsetY);
                 this.context.stroke(); // nothing will show untill we do stroke() or fill()
