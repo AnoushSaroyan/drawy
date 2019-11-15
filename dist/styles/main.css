@@ -245,7 +245,6 @@ input[type=range]:focus::-webkit-slider-runnable-track {
 }
 
 #images {
-    /* display: flex; */
     flex-direction: row-reverse;
     margin-left: 15px;
     /* border: 2px solid rgba(110, 107, 107, 0.37); */
