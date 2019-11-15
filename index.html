@@ -23,13 +23,17 @@
                 <div class="tool-pencil tool-icon" id="tool-pencil-div">
                     <img src="./dist/images/pencil.png" alt="" class="tool-hover" id="brush-icon">
                     <div class="brush-slider" id="brush-slider-div">
-                        <img src="./dist/images/brush-width.png" alt="" id="brush-slider-img">
+                        <img src="./dist/images/brush-width.png" alt="" id="brush-slider-img" class="slider-img">
                         <input type="range" id="brush-size" min="1" max="70" step="5" value="5">
                     </div>
                 </div>  
-                <div class="tool-eraser tool-icon">
+                <div class="tool-eraser tool-pencil tool-icon" id="tool-eraser-div">
                     <!-- <button>eraser</button> -->
                     <img src="./dist/images/eraser.png" alt="" class="tool-hover" id="eraser-icon">
+                    <div class="brush-slider" id="eraser-slider-div">
+                        <img src="./dist/images/brush-width.png" alt="" id="brush-slider-img" class="slider-img">
+                        <input type="range" id="eraser-size" min="1" max="70" step="5" value="25">
+                    </div>
                 </div>
                 <div class="tool-image-upload tool-icon" id="tool-upload-div">
                     <!-- <button>upload</button> -->
@@ -61,24 +65,29 @@
                         <canvas id="color-strip" height="40" width="181"></canvas>
                     </div>
                 </div>
-                <div id="color-fill" class="tool-fill tool-icon">
-                    <img src="./dist/images/color-filler.png" alt="" class="tool-hover">
+                <div id="color-fill" class="tool-fill display-flex tool-icon tool-action">
+                    <img src="./dist/images/color-filler.png" alt="" class="tool-hover" id="color-fill-icon">
+                    <div class="hover-div" id="hover-fill">Fill</div>
                 </div>
-                <div class="tool-undo tool-icon tool-action">
+                <div id="undo" class="tool-undo display-flex tool-icon tool-action">
                     <img src="./dist/images/undo.png" alt="" id="undo-btn" class="tool-hover">
+                    <div class="hover-div" id="hover-undo">Undo</div>
                 </div>
-                <div class="tool-redo tool-icon tool-action">
+                <div id="redo" class="tool-redo display-flex tool-icon tool-action">
                     <!-- <button id="redo-btn">redo</button> -->
                     <img src="./dist/images/redo.png" alt="" id="redo-btn" class="tool-hover">
+                    <div class="hover-div" id="hover-redo">Redo</div>
                 </div>
                 <!-- <div class="tool-zoom tool-icon tool-action">
                     <img src="./dist/images/zoom.png" alt="">
                 </div> -->
-                <div id="clear-canvas-btn" class="tool-clear tool-icon tool-action">
-                    <img src="./dist/images/delete.png" alt="" class="tool-hover">
+                <div id="clear-canvas-btn" class="tool-clear display-flex tool-icon tool-action">
+                    <img src="./dist/images/delete.png" alt="" class="tool-hover" id="clear-icon">
+                    <div class="hover-div" id="hover-delete">Delete</div>
                 </div>
-                <div class="tool-download tool-icon tool-action">
+                <div id="download" class="tool-download display-flex tool-icon tool-action">
                     <img src="./dist/images/download.png" alt="" id="download-btn" class="tool-hover" >
+                    <div class="hover-div" id="hover-download">Download</div>
                 </div>
             </div>
             </div>
