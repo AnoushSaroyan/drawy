@@ -51,6 +51,7 @@ html {
     margin-top: 30px;
     margin-bottom: 30px;
     margin-left: 0.9rem;
+    z-index: 10;
     /* display: flex;
     flex-direction: row; */
     /* width: 400px; */
@@ -65,6 +66,7 @@ html {
     display: flex;
     flex-direction: column;
     margin-top: 40px;
+    /* margin-top: 80px; */
     width: 70px;
     padding: 10px;
 }
@@ -92,6 +94,7 @@ html {
     display: flex;
     flex-direction: row;
     margin-left: 14px;
+    z-index: 10;
 }
 
 /* .tool-color {
@@ -188,7 +191,8 @@ html {
     border: none;
     box-shadow: none;
     border-radius: 0;
-    background-color: #ededee;
+    /* background-color: #ededee; */
+    background-color: transparent;
     /* margin-top: 4px; */
 }
 
@@ -203,11 +207,9 @@ html {
     width: 138px;
 }
 
-#canvas {
-    /* display: none; */
+/* #canvas {
     margin-top: 50px;
-    
-}
+} */
 
 
 /* input[type=range]::-webkit-slider-runnable-track {
@@ -230,6 +232,7 @@ input[type=range]:focus::-webkit-slider-runnable-track {
     margin-left: 14px; */
     margin-left: 14px;
     display: -webkit-box;
+    z-index: 10;
 }
 
 #images {
@@ -296,6 +299,7 @@ input[type=range]:focus::-webkit-slider-runnable-track {
     border: none;
     height: 44px;
     width: 44px;
+    margin-top: 30px;
 }
 
 #download-btn:hover {
@@ -305,5 +309,88 @@ input[type=range]:focus::-webkit-slider-runnable-track {
 .toolbar-wrapper {
     width: 200px;
     height: 614px;
-    /* padding-right: 10px; */
 }
+
+#canvas-container p {
+    font-family: "Indie Flower", cursive;
+    margin-bottom: 3px;
+    font-size: 22px;
+}
+
+#canvas-container {
+    margin-top: 19px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* .social-links {
+    background: url("../images/sticky-background.png");
+} */
+
+.aside-div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-right: 30px;
+    margin-left: 30px;
+    margin-bottom: 30px;
+}
+
+.sticky-background {
+    width: 400px;
+    height: 330px;
+    /* margin-left: 5px; */
+}
+
+.social-links {
+    position: relative;
+}
+
+.github-logo {
+    width: 45px;
+    height: 45px;
+    /* position: absolute; */
+}
+
+.github-logo:hover {
+
+}
+
+.linkedin-logo {
+    width: 50px;
+    height: 50px;
+    /* position: absolute; */
+}
+
+.github-div {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    top: 30%;
+    left: 25%;
+    position: absolute;
+}
+
+.linkedin-div {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    top: 50%;
+    left: 20%;
+    position: absolute;
+}
+
+.social-links p {
+    font-family: "Indie Flower", cursive;
+    margin-right: 10px;
+    font-size: 19px;
+}
+
+.social-links a:hover {
+    cursor: pointer;
+}
+
+
+

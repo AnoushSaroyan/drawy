@@ -602,8 +602,10 @@ export default class SketchPad {
                     this.tool.imageUpload.currentImg,
                     e.offsetX - 15,
                     e.offsetY - 15,
-                    5 * brushWidth.value,
-                    5 * brushWidth.value
+                    // 5 * brushWidth.value,
+                    // 5 * brushWidth.value
+                    50, 50
+
                 );
             } else if (this.currentBrush === "eraser") {
                 this.context.strokeStyle = "white";
