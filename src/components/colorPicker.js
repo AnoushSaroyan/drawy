@@ -21,7 +21,6 @@ export default class ColorPicker {
         // events
         this.colorStrip.addEventListener("mousedown", this.mousedown);
         this.colorStrip.addEventListener("mouseup", this.mouseup);
-        // this.colorStrip.addEventListener("mousemove", this.mousemove);
     }
 
     colorPalette() {
@@ -35,34 +34,16 @@ export default class ColorPicker {
         gradient.addColorStop(0.85, 'rgba(255, 0, 255, 1)');
         gradient.addColorStop(1, 'rgba(255, 0, 0, 1)');
 
-        // gradient.addColorStop(0, "rgba(255, 255, 255, 1)");
-        // gradient.addColorStop(0.5, "rgba(255, 255, 255, 0)");
-        // gradient.addColorStop(0.5, "rgba(0,     0,   0, 0)");
-        // gradient.addColorStop(1, "rgba(0,     0,   0, 1)");
         this.colorctx.fillStyle = gradient;
         this.colorctx.fill();
 
         gradient = this.colorctx.createLinearGradient(0, 0, 0, this.colorStrip.height);
-
-        // gradient.addColorStop(0, "rgba(255, 255, 255, 1)");
-        // gradient.addColorStop(0.5, "rgba(255, 255, 255, 0)");
-        // gradient.addColorStop(0.5, "rgba(0,     0,   0, 0)");
-        // gradient.addColorStop(1, "rgba(0,     0,   0, 1)");
-
-        // this.colorctx.fillStyle = gradient;
-        // this.colorctx.fillRect(0, 0, this.colorctx.canvas.width, this.colorctx.canvas.height);
     }
 
     mousedown(e) {
         this.dragging = true;
         this.changeColor(e);
     }
-
-    // mousemove(e) {
-    //     if (this.dragging ) {
-    //     this.changeColor(e);
-    //     }
-    // }
 
     mouseup(e) {
         this.dragging  = false;
@@ -72,9 +53,7 @@ export default class ColorPicker {
         this.x = e.offsetX;
         this.y = e.offsetY;
         let imageData = this.colorctx.getImageData(this.x, this.y, 1, 1);
-        // debugger
         this.selectedColor = 'rgba(' + imageData.data[0] + ',' + imageData.data[1] + ',' + imageData.data[2] + ',1)';
-        // rgba(255, 0, 0, 1)
         this.colorLabel.style.backgroundColor = this.selectedColor;
         document.getElementById("logo").setAttribute("style", `text-shadow: 1px 1px 5px ${this.selectedColor}`)
     }

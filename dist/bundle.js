@@ -66809,7 +66809,6 @@ class ColorPicker {
         // events
         this.colorStrip.addEventListener("mousedown", this.mousedown);
         this.colorStrip.addEventListener("mouseup", this.mouseup);
-        // this.colorStrip.addEventListener("mousemove", this.mousemove);
     }
 
     colorPalette() {
@@ -66823,34 +66822,16 @@ class ColorPicker {
         gradient.addColorStop(0.85, 'rgba(255, 0, 255, 1)');
         gradient.addColorStop(1, 'rgba(255, 0, 0, 1)');
 
-        // gradient.addColorStop(0, "rgba(255, 255, 255, 1)");
-        // gradient.addColorStop(0.5, "rgba(255, 255, 255, 0)");
-        // gradient.addColorStop(0.5, "rgba(0,     0,   0, 0)");
-        // gradient.addColorStop(1, "rgba(0,     0,   0, 1)");
         this.colorctx.fillStyle = gradient;
         this.colorctx.fill();
 
         gradient = this.colorctx.createLinearGradient(0, 0, 0, this.colorStrip.height);
-
-        // gradient.addColorStop(0, "rgba(255, 255, 255, 1)");
-        // gradient.addColorStop(0.5, "rgba(255, 255, 255, 0)");
-        // gradient.addColorStop(0.5, "rgba(0,     0,   0, 0)");
-        // gradient.addColorStop(1, "rgba(0,     0,   0, 1)");
-
-        // this.colorctx.fillStyle = gradient;
-        // this.colorctx.fillRect(0, 0, this.colorctx.canvas.width, this.colorctx.canvas.height);
     }
 
     mousedown(e) {
         this.dragging = true;
         this.changeColor(e);
     }
-
-    // mousemove(e) {
-    //     if (this.dragging ) {
-    //     this.changeColor(e);
-    //     }
-    // }
 
     mouseup(e) {
         this.dragging  = false;
@@ -66860,9 +66841,7 @@ class ColorPicker {
         this.x = e.offsetX;
         this.y = e.offsetY;
         let imageData = this.colorctx.getImageData(this.x, this.y, 1, 1);
-        // debugger
         this.selectedColor = 'rgba(' + imageData.data[0] + ',' + imageData.data[1] + ',' + imageData.data[2] + ',1)';
-        // rgba(255, 0, 0, 1)
         this.colorLabel.style.backgroundColor = this.selectedColor;
         document.getElementById("logo").setAttribute("style", `text-shadow: 1px 1px 5px ${this.selectedColor}`)
     }
@@ -66887,13 +66866,11 @@ class ImageUpload {
     constructor() {
         this.imageUpload = document.getElementById("image-upload");
         this.currentImg;
-        this.images = []; // delete later
+        this.images = [];
 
         this.handleImageUpload = this.handleImageUpload.bind(this);
         this.handleImageClick = this.handleImageClick.bind(this);
         this.handleOtherIcons = this.handleOtherIcons.bind(this);
-
-        // this.existingUploads();
 
         this.imageUpload.addEventListener("change", this.handleImageUpload);
         document.getElementById('images').addEventListener("click", this.handleImageClick);
@@ -66912,13 +66889,6 @@ class ImageUpload {
         img4.src="./dist/images/paw.png";
         img5.src="./dist/images/bird-footprint-on-circle.png";
         img6.src="./dist/images/animal-footprints.png";
-
-        // img1.crossOrigin = "Anonymous"
-        // img2.crossOrigin = "Anonymous"
-        // img3.crossOrigin = "Anonymous"
-        // img4.crossOrigin = "Anonymous"
-        // img5.crossOrigin = "Anonymous"
-        // img6.crossOrigin = "Anonymous"
 
         img1.classList.add("upload");
         img2.classList.add("upload");
@@ -66949,9 +66919,7 @@ class ImageUpload {
     handleImageClick(e) {
         let img = document.createElement('img');
         img.src = e.target.src;
-        // img.crossOrigin = "Anonymous"
 
-        // remove 
         let imgs = document.querySelectorAll('.upload');
         imgs.forEach(ele => {
             ele.classList.remove('img-selected');
@@ -66966,7 +66934,6 @@ class ImageUpload {
         this.currentImg.setAttribute("style", "border: 1px solid black");
 
         document.getElementById("upload-icon").classList.add("selected"); // this is the selected action from the toolbar
-        // document.getElementById("upload-icon").classList.add("uplod-icon-selected-style");
         document.getElementById("upload-icon").setAttribute("style", "background-color: black; box-shadow: none;");
         document.getElementById("upload-icon").src = "../../dist/images/tree-on.png";
 
@@ -66996,11 +66963,10 @@ class ImageUpload {
        
         let img = document.createElement('img');
         img.src = imageSRC;
-        // img.crossOrigin = "Anonymous"
 
         img.classList.add("upload");
         document.getElementById('images').appendChild(img);
-        this.images.push(img); //delete later
+        this.images.push(img);
     }
 }
 
@@ -67017,11 +66983,7 @@ class ImageUpload {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return SketchPad; });
 const API_ENDPOINT = 'https://inputtools.google.com/request?ime=handwriting&app=autodraw&dbg=1&cs=1&oe=UTF-8';
-// const STENCILS_ENDPOINT = 'src/data/stencils.json';
-// const stencils = require("../data/stencils.json");
 const request = __webpack_require__(/*! request */ "./node_modules/request/index.js");
-// const request = require('http').request;
-// window.stencils = stencils;
 
 class SketchPad {
     constructor(canvas, tool) {
@@ -67029,10 +66991,6 @@ class SketchPad {
         this.canvas = canvas;
         this.tool = tool;
         this.context = canvas.getContext("2d");
-
-        // set the background to white
-        // this.context.fillStyle = "white";
-        // this.context.fillRect(0, 0, canvas.width, canvas.height);
 
         // clear canvas
         this.clearCanvasBtn = document.getElementById('clear-canvas-btn');
@@ -67079,9 +67037,6 @@ class SketchPad {
         this.prepareNewShape(); 
         this.saveState(); // cuz the first time it won't have a second to last to undo
 
-
-        // this.offsetX = document.body.offsetLeft;
-        // this.offsetY = document.body.offsetTop;
         this.offsetX = this.canvas.offsetLeft;
         this.offsetY = this.canvas.offsetTop;
 
@@ -67105,8 +67060,6 @@ class SketchPad {
         this.determineCurrentBrush = this.determineCurrentBrush.bind(this);
         this.handleEraserIconClick = this.handleEraserIconClick.bind(this);
         this.download = this.download.bind(this);
-        // this.prepareStencil = this.prepareStencil.bind(this);
-        // this.drawUndoListExceptLast = this.drawUndoListExceptLast.bind(this);
 
         // draw events
         this.canvas.addEventListener("mousedown", this.engage);
@@ -67251,8 +67204,6 @@ class SketchPad {
     }
 
     determineCurrentBrush() {
-        // const uploadIcon = document.getElementById("upload-icon");
-        // const brushIcon = document.getElementById("brush-icon");
         if (document.getElementById("upload-icon").classList.contains("selected")) {
             this.currentBrush = "image"
         } else if (document.getElementById("brush-icon").classList.contains("selected")) {
@@ -67262,32 +67213,19 @@ class SketchPad {
         }
     }
 
-    // loadStencils() {
-    //     // debugger
-    //     // this.Http.get(STENCILS_ENDPOINT).subscribe(response => this.stencils = response.json());
-    // }
-
     displaySuggestions(iconList) {
         this.drawSuggestions.innerHTML = '';
         document.getElementById("draw-suggestions").innerHTML = "";
 
 
         iconList.forEach(icon => {
-            // debugger
             if (icon in window.stencils) {
-                // debugger
                 // each icon has different versions of drawing
                 window.stencils[icon].forEach(type => {
-                    // debugger
-                    // let img = new Image();
-                    // img.crossOrigin = "Anonymous"
-                    // img.src = type.src;
                     this.drawSuggestions.innerHTML += '<img class="img-svg" src="' + type.src + '" crossOrigin="Anonymous" />';
                 });
             }
         });
-
-        // this.translateSVGToInlineSVG();
     }
 
     loadSuggestionsFromAPI(shapes) {
@@ -67313,10 +67251,8 @@ class SketchPad {
                 headers,
                 body: JSON.stringify(requestBody),
             }).then((response) => {
-                // debugger
                 return response.json();
             }).then((jsonResponse) => {
-                // debugger
                 this.displaySuggestions(jsonResponse[1][0][1]);
             });
 
@@ -67343,283 +67279,109 @@ class SketchPad {
 
     commitCurrentShape() {
         this.shapes.push(this.currentShape);
-        // displaySuggestions goes here
     }
 
-    // prepareStencil(imgURL) {
-    //     // <object id="svg-object" data="path/to/external.svg" type="image/svg+xml"></object>
-        
-    //     // let obj = document.createElement('object');
-    //     // obj.id = "svg-obj";
-    //     // obj.data = image.src;
-    //     // obj.type = "image/svg+xml";
-
-    //     request(imgURL, (error, response, body) => {
-    //         response;
-    //         error;
-    //         body;
-    //         debugger
-    //         const parser = new DOMParser();
-    //         const xmlDoc = parser.parseFromString(body, 'text/html');
-
-    //         const paths = xmlDoc.getElementsByTagName("path");
-    //         // let svg = xmlDoc.querySelector('svg');
-    //         debugger
-
-    //         Array.from(paths).forEach(path => {
-    //             debugger
-    //             const style = window.getComputedStyle(path);
-    //             const fill = style.getPropertyValue("fill");
-
-    //             path.setAttribute("style", "stroke: blue");
-    //             console.log(fill);
-    //             debugger
-    //             if (fill === "rgb(255, 255, 255)") {
-    //                 path.parentElement.removeChild(path);
-    //                 debugger
-    //             }
-    //         })
-    //     });
-    // }
-
-    // drawUndoListExceptLast() {
-    //     let undoListCopy = this.undoList.slice();
-    //     undoListCopy.pop();
-
-    //     undoListCopy.forEach(drawing => {
-    //         let img = document.createElement('img');
-    //         img.src = drawing;
-    //         img.crossOrigin = "Anonymous"
-
-    //         img.onload = () => {
-    //             // this.clear();
-    //             this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
-    //             this.context.drawImage(img, 0, 0, this.canvas.width, this.canvas.height, 0, 0, this.canvas.width, this.canvas.height);
-    //         }
-    //     })
-
-    // }
-
-    // drawSecondToLast() {
-
-    // }
-
     pickSuggestion(e) {
-        // try { 
-            // debugger
-            // this.clear();
-            // let xMax = this.canvas.width;
-            // let yMax = this.canvas.height;
-
-            // debugger
-
         let xAvg = (Math.max.apply(null, this.currentShape[0]) + Math.min.apply(null, this.currentShape[0])) / 2;
         let yAvg = (Math.max.apply(null, this.currentShape[1]) + Math.min.apply(null, this.currentShape[1])) / 2;
 
-            let width = 200;
-            let height = 200;
+        let width = 200;
+        let height = 200;
 
-            // debugger
-            // let image = new Image();
-            // image.crossOrigin = "Anonymous";
-            // image.src = e.target.src;
-            // image.className = "img-svg";
-            // image.setAttribute('style', "width: 50px; height:50px;");
-            
-            // this.prepareStencil(image);
+        const imgURL = e.target.src;
+        // draw second to last element of the undo_list
+        if (this.suggetionPicked) {
+            let captureWithoutPickedSgs = document.createElement('img');
+            captureWithoutPickedSgs.src = this.captureWithoutPickedSgsSRC;
+            captureWithoutPickedSgs.crossOrigin = "Anonymous";
 
-            // debugger
-            // remove the white background and fill with the current color
-            ////////////
-            // const imgID = image.getAttribute('id');
-            // const imgClass = image.getAttribute('class');
-            // const imgURL = image.getAttribute('src');
-
-            // debugger
-
-            // this.saveState();
-
-            const imgURL = e.target.src;
-            // this.undo();
-            // draw second to last element of the undo_list
-            if (this.suggetionPicked) {
-                let captureWithoutPickedSgs = document.createElement('img');
-                captureWithoutPickedSgs.src = this.captureWithoutPickedSgsSRC;
-                captureWithoutPickedSgs.crossOrigin = "Anonymous";
-
-                captureWithoutPickedSgs.onload = () => {
-                    // debugger
-                    // this.clear();
-                    this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
-                    this.context.drawImage(captureWithoutPickedSgs, 0, 0, this.canvas.width, this.canvas.height, 0, 0, this.canvas.width, this.canvas.height);
-                    // this.saveState(this.undoList, true);
-                    // this.download();
-                }
-            } else {
-                let lastDrawingSRC = this.undoList[this.undoList.length - 1];
-                let lastDrawing = document.createElement('img');
-                lastDrawing.src = lastDrawingSRC;
-                this.captureWithoutPickedSgsSRC = lastDrawingSRC
-                lastDrawing.crossOrigin = "Anonymous";
-
-                lastDrawing.onload = () => {
-                    // debugger
-                    // this.clear();
-                    this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
-                    this.context.drawImage(lastDrawing, 0, 0, this.canvas.width, this.canvas.height, 0, 0, this.canvas.width, this.canvas.height);
-                    // this.saveState(this.undoList, true);
-                    // this.download();
-                }
+            captureWithoutPickedSgs.onload = () => {
+                this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+                this.context.drawImage(captureWithoutPickedSgs, 0, 0, this.canvas.width, this.canvas.height, 0, 0, this.canvas.width, this.canvas.height);
             }
-            request(imgURL, (error, response, body) => {
-                response;
-                error;
-                body;
-                imgURL
-                // debugger
-                
-                // gets rid of all the white fills and fills with the current color
-                const parser = new DOMParser();
-                const xmlDoc = parser.parseFromString(body, 'text/html');
-                let svg = xmlDoc.querySelector('svg');
+        } else {
+            let lastDrawingSRC = this.undoList[this.undoList.length - 1];
+            let lastDrawing = document.createElement('img');
+            lastDrawing.src = lastDrawingSRC;
+            this.captureWithoutPickedSgsSRC = lastDrawingSRC
+            lastDrawing.crossOrigin = "Anonymous";
 
-                const paths = xmlDoc.getElementsByTagName("path");
-                const circles = xmlDoc.getElementsByTagName("circle");
-                const ellipses = xmlDoc.getElementsByTagName("ellipse");
-                const lines = xmlDoc.getElementsByTagName("line");
-                const polygons = xmlDoc.getElementsByTagName("polygon");
-                const polylines = xmlDoc.getElementsByTagName("polyline");
-                const rects = xmlDoc.getElementsByTagName("rect");
-
-                // debugger
-                Array.from(rects).forEach(rect => {
-                    rect.setAttribute("style", `stroke: ${this.tool.colorPicker.selectedColor}; fill: none;`);
-                })
-
-                Array.from(polylines).forEach(polyline => {
-                    polyline.setAttribute("style", `stroke: ${this.tool.colorPicker.selectedColor}; fill: none;`);
-                })
-
-                Array.from(polygons).forEach(polygon => {
-                    polygon.setAttribute("style", `stroke: ${this.tool.colorPicker.selectedColor}; fill: none;`);
-                })
-
-                Array.from(lines).forEach(line => {
-                    line.setAttribute("style", `stroke: ${this.tool.colorPicker.selectedColor}; fill: none;`);
-                })
-
-                Array.from(ellipses).forEach(ellipse => {
-                    ellipse.setAttribute("style", `stroke: ${this.tool.colorPicker.selectedColor}; fill: none;`);
-                })
-
-                Array.from(circles).forEach(circle => {
-                    circle.setAttribute("style", `stroke: ${this.tool.colorPicker.selectedColor}; fill: none;`);
-                })
-
-                Array.from(paths).forEach(path => {
-                    
-                    // const style = window.getComputedStyle(path);
-                    // const fill = style.getPropertyValue("fill");
-                    // const fill = svg.style.getPropertyValue("fill");
-                    // debugger
-
-                    path.setAttribute("style", `stroke: ${this.tool.colorPicker.selectedColor}; fill: none;`);
-                    // path.setAttribute("style", "fill: none");
-                    // console.log(fill);
-                    // // debugger
-                    // if (fill === "rgb(255, 255, 255)") {
-                    //     path.parentElement.removeChild(path);
-                    //     // debugger
-                    // }
-                })
-
-                // this.clear();
-                // this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
-                // this.context.fillStyle = "white";
-                // this.context.fillRect(0, 0, canvas.width, canvas.height);
-                // this.drawUndoListExceptLast();
-
-                // draw second to last element of the undo_list
-                // let secondToLastDrawingSRC = this.undoList[this.undoList.length - 2];
-                // let secondToLastDrawing = document.createElement('img');
-                // secondToLastDrawing.src = secondToLastDrawingSRC;
-                // secondToLastDrawing.crossOrigin = "Anonymous"
-
-                // secondToLastDrawing.onload = () => {
-                //     // this.clear();
-                //     this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
-                //     this.context.drawImage(secondToLastDrawing, 0, 0, this.canvas.width, this.canvas.height, 0, 0, this.canvas.width, this.canvas.height);
-                // }
-
-
-                const brushWidth = document.getElementById("brush-size");
-                let newImg = new Image();
-                // get svg data
-                let xml = new XMLSerializer().serializeToString(svg);
-
-                // make it base64
-                var svg64 = btoa(xml);
-                var b64Start = 'data:image/svg+xml;base64,';
-
-                // prepend a "header"
-                var image64 = b64Start + svg64;
-                // debugger
-
-                // set it as the source of the newImg element
-                newImg.src = image64;
-
-                newImg.onload = () => { 
-                    // debugger
-                    // this.saveState(); 
-
-                    // this.context.drawImage(newImg, 10, 10);
-
-                    // this.context.drawImage(
-                    //     newImg,
-                    //     e.offsetX - 25,
-                    //     e.offsetY - 25,
-                    //     50 * (1/2 * brushWidth.value),
-                    //     50 * (1/2 * brushWidth.value)
-                    // );
-
-                    this.context.drawImage(newImg, (xAvg - width / 2), (yAvg - height / 2), width, height);
-
-                    this.shapes = [];
-                    this.suggetionPicked = true;
-                    // this.saveState(); 
-                    // this.download();
-                };
-
-                // newImg.onload = () => {
-                //     this.context.drawImage(newImg, (xAvg - weight / 2), (yAvg - height / 2), 200, 200)
-                // }
-
-
-                // this.saveState();   
-
-                // image.parentNode.replaceChild(svg, image);
-            });
-            ///////////
-
-            // this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
-            // image.onload = () => { 
-                
+            lastDrawing.onload = () => {
+                this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+                this.context.drawImage(lastDrawing, 0, 0, this.canvas.width, this.canvas.height, 0, 0, this.canvas.width, this.canvas.height);
+            }
+        }
+        request(imgURL, (error, response, body) => {
+            response;
+            error;
+            body;
+            imgURL
             // debugger
-            //     this.context.drawImage(
-            //     image, 
-            //     e.offsetX - 25,
-            //     e.offsetY - 25,
-            //     // 50 * (1 / 2 * this.context.lineWidth),
-            //     // 50 * (1 / 2 * this.context.lineWidth));
-            //     50 * (1 / 2 * 10),
-            //     50 * (1 / 2 * 10));
-            // debugger
-            // }
-        // } catch {
-        //     console.log("sugesstions are not completed.")
-        // }        
+            
+            // gets rid of all the white fills and fills with the current color
+            const parser = new DOMParser();
+            const xmlDoc = parser.parseFromString(body, 'text/html');
+            let svg = xmlDoc.querySelector('svg');
+
+            const paths = xmlDoc.getElementsByTagName("path");
+            const circles = xmlDoc.getElementsByTagName("circle");
+            const ellipses = xmlDoc.getElementsByTagName("ellipse");
+            const lines = xmlDoc.getElementsByTagName("line");
+            const polygons = xmlDoc.getElementsByTagName("polygon");
+            const polylines = xmlDoc.getElementsByTagName("polyline");
+            const rects = xmlDoc.getElementsByTagName("rect");
+
+            Array.from(rects).forEach(rect => {
+                rect.setAttribute("style", `stroke: ${this.tool.colorPicker.selectedColor}; fill: none;`);
+            })
+
+            Array.from(polylines).forEach(polyline => {
+                polyline.setAttribute("style", `stroke: ${this.tool.colorPicker.selectedColor}; fill: none;`);
+            })
+
+            Array.from(polygons).forEach(polygon => {
+                polygon.setAttribute("style", `stroke: ${this.tool.colorPicker.selectedColor}; fill: none;`);
+            })
+
+            Array.from(lines).forEach(line => {
+                line.setAttribute("style", `stroke: ${this.tool.colorPicker.selectedColor}; fill: none;`);
+            })
+
+            Array.from(ellipses).forEach(ellipse => {
+                ellipse.setAttribute("style", `stroke: ${this.tool.colorPicker.selectedColor}; fill: none;`);
+            })
+
+            Array.from(circles).forEach(circle => {
+                circle.setAttribute("style", `stroke: ${this.tool.colorPicker.selectedColor}; fill: none;`);
+            })
+
+            Array.from(paths).forEach(path => {
+                path.setAttribute("style", `stroke: ${this.tool.colorPicker.selectedColor}; fill: none;`);
+            })
+
+            // const brushWidth = document.getElementById("brush-size");
+            let newImg = new Image();
+            // get svg data
+            let xml = new XMLSerializer().serializeToString(svg);
+
+            // make it base64
+            var svg64 = btoa(xml);
+            var b64Start = 'data:image/svg+xml;base64,';
+
+            // prepend a "header"
+            var image64 = b64Start + svg64;
+
+            // set it as the source of the newImg element
+            newImg.src = image64;
+
+            newImg.onload = () => { 
+                this.context.drawImage(newImg, (xAvg - width / 2), (yAvg - height / 2), width, height);
+
+                this.shapes = [];
+                this.suggetionPicked = true;
+            };
+        });      
     }
-    ///////
 
     saveState(list, keepRedo) {
         keepRedo = keepRedo || false;
@@ -67634,7 +67396,6 @@ class SketchPad {
         if (popList.length) {
             this.saveState(pushList, true);
             let ele = popList.pop();
-            // let img = new Element('img', { 'src': ele });
             let img = document.createElement('img');
             img.src = ele;
             img.crossOrigin = "Anonymous"
@@ -67663,7 +67424,6 @@ class SketchPad {
 
         if(this.dragging) {
             this.context.lineWidth = brushWidth.value;
-            // this.context.strokeStyle = "#58d33a";
             this.context.strokeStyle = this.tool.colorPicker.selectedColor;
 
             if( this.currentBrush === "regular") {
@@ -67718,7 +67478,6 @@ class SketchPad {
         this.saveState();
         this.context.fillStyle = this.tool.colorPicker.selectedColor;
         this.context.fillRect(0, 0, canvas.width, canvas.height);
-        // this.saveState();
     }
 
     clear(e) {
@@ -67734,10 +67493,8 @@ class SketchPad {
         this.shapes = [];
         this.undoList = [];
         this.redoList = [];
-        // this.drawSuggestions.innerHTML = '';
 
         document.getElementById("draw-suggestions").innerHTML = "";
-        // this.suggestionsCompleted = true;
     }
 
     download(e) {

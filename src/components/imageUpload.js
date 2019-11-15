@@ -2,13 +2,11 @@ export default class ImageUpload {
     constructor() {
         this.imageUpload = document.getElementById("image-upload");
         this.currentImg;
-        this.images = []; // delete later
+        this.images = [];
 
         this.handleImageUpload = this.handleImageUpload.bind(this);
         this.handleImageClick = this.handleImageClick.bind(this);
         this.handleOtherIcons = this.handleOtherIcons.bind(this);
-
-        // this.existingUploads();
 
         this.imageUpload.addEventListener("change", this.handleImageUpload);
         document.getElementById('images').addEventListener("click", this.handleImageClick);
@@ -27,13 +25,6 @@ export default class ImageUpload {
         img4.src="./dist/images/paw.png";
         img5.src="./dist/images/bird-footprint-on-circle.png";
         img6.src="./dist/images/animal-footprints.png";
-
-        // img1.crossOrigin = "Anonymous"
-        // img2.crossOrigin = "Anonymous"
-        // img3.crossOrigin = "Anonymous"
-        // img4.crossOrigin = "Anonymous"
-        // img5.crossOrigin = "Anonymous"
-        // img6.crossOrigin = "Anonymous"
 
         img1.classList.add("upload");
         img2.classList.add("upload");
@@ -64,9 +55,7 @@ export default class ImageUpload {
     handleImageClick(e) {
         let img = document.createElement('img');
         img.src = e.target.src;
-        // img.crossOrigin = "Anonymous"
 
-        // remove 
         let imgs = document.querySelectorAll('.upload');
         imgs.forEach(ele => {
             ele.classList.remove('img-selected');
@@ -81,7 +70,6 @@ export default class ImageUpload {
         this.currentImg.setAttribute("style", "border: 1px solid black");
 
         document.getElementById("upload-icon").classList.add("selected"); // this is the selected action from the toolbar
-        // document.getElementById("upload-icon").classList.add("uplod-icon-selected-style");
         document.getElementById("upload-icon").setAttribute("style", "background-color: black; box-shadow: none;");
         document.getElementById("upload-icon").src = "../../dist/images/tree-on.png";
 
@@ -111,10 +99,9 @@ export default class ImageUpload {
        
         let img = document.createElement('img');
         img.src = imageSRC;
-        // img.crossOrigin = "Anonymous"
 
         img.classList.add("upload");
         document.getElementById('images').appendChild(img);
-        this.images.push(img); //delete later
+        this.images.push(img);
     }
 }
